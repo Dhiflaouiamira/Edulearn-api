@@ -8,6 +8,7 @@ import lombok.Setter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.util.Date;
@@ -30,8 +31,10 @@ public class Commentaire extends BaseEntity {
     @NotBlank
     private Date dateCreation;
     
+ 
     @ManyToOne(optional = false,fetch = FetchType.EAGER)
-     private User user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     
     @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private Cours cours;

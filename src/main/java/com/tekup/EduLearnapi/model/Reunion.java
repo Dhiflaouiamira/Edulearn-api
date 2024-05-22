@@ -1,16 +1,15 @@
 package com.tekup.EduLearnapi.model;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import java.util.Date;
-import java.util.Set;
-
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -34,6 +33,6 @@ public class Reunion extends BaseEntity {
     @Column(nullable = false)
     private Date dateFin;
     
-    @ManyToMany(mappedBy = "reunions")
-  	private Set<Chapitre>  chapitres;
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+    private Chapitre chapitre;
 }

@@ -65,8 +65,9 @@ public class Cours extends BaseEntity {
     @ManyToMany(mappedBy = "cours")
 	private Set<User>  users;
     
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    private Categorie categorie;
+    @ManyToMany(mappedBy = "cours")
+  	private Set<Categorie>  categories;
+    
     
     @OneToMany(mappedBy = "cours")
     @OnDelete(action = OnDeleteAction.CASCADE)

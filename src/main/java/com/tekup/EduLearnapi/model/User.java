@@ -65,7 +65,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Commentaire> commentaires;
-    
+
+   
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Reclamation> reclamations;
