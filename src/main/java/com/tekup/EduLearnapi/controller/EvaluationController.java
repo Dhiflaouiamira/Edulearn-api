@@ -1,7 +1,5 @@
 package com.tekup.EduLearnapi.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,33 +11,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tekup.EduLearnapi.Service.CommentaireServices;
-import com.tekup.EduLearnapi.dto.CommentaireDTO;
-
+import com.tekup.EduLearnapi.Service.EvaluationServices;
+import com.tekup.EduLearnapi.dto.EvaluationDTO;
 
 @RestController
-@RequestMapping("/api/commentaires")
-public class CommentaireController {
+@RequestMapping("/api/evaluations")
+public class EvaluationController {
 
 	 @Autowired
-	    private CommentaireServices commentaireServices;
+	    private EvaluationServices evaluationServices;
 
 	 @GetMapping
-	    public Page<CommentaireDTO> getCommentaires(Pageable pageable)
+	    public Page<EvaluationDTO> getEvaluations(Pageable pageable)
 	    {
-	    	return commentaireServices.getAllCommentaires(pageable);
+	    	return evaluationServices.getAllEvaluations(pageable);
 	    }
 
 	    @PostMapping
-	    public CommentaireDTO addOneCommentaire(@RequestBody CommentaireDTO commentaire)
+	    public EvaluationDTO addOneEvaluation(@RequestBody EvaluationDTO evaluation)
 	    {
-	    return commentaireServices.addOneCommentaire(commentaire);	
+	    return evaluationServices.addOneEvaluation(evaluation);	
 	    }
 
 	    @DeleteMapping("/{id}")
-	    public void deleteOneCommentaire(@PathVariable long id)
+	    public void deleteOneEvaluation(@PathVariable long id)
 	    {
-	    commentaireServices.deleteOneCommentaire(id);	
+	    evaluationServices.deleteOneEvaluation(id);	
 
 	    }
+
 }
+

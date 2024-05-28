@@ -1,13 +1,14 @@
 package com.tekup.EduLearnapi.Service;
 
-import java.util.List;
-
-import com.tekup.EduLearnapi.model.Categorie;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.tekup.EduLearnapi.dto.CategorieDTO;
 
 public interface CategorieServices {
 
-	public List<Categorie> findAll();
-	public Categorie findOne(long id);
-	public Categorie AddOne(Categorie categorie);
-	public void DeleteOne(long id);
+	public Page<CategorieDTO> getAllCategories(Pageable pageable) ;
+	public CategorieDTO addOneCategorie(CategorieDTO categorie);
+	public void deleteOneCategorie(long id);
+	public Optional<CategorieDTO> findOneCategorie(long id);
 }

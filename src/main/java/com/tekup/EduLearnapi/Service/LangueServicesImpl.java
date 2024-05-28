@@ -1,46 +1,76 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.tekup.EduLearnapi.dto.LangueDTO;
+import com.tekup.EduLearnapi.mappers.LangueMapper;
+import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Langue;
+import com.tekup.EduLearnapi.repository.CoursRepository;
 import com.tekup.EduLearnapi.repository.LangueRepository;
 
+
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
+
 public class LangueServicesImpl implements LangueServices{
 
-	@Autowired
-	LangueRepository langueRepository;
+	private final LangueRepository langueRepository;
+	
+	private final CoursRepository coursRepository;
 	
 	
 	@Override
-	public List<Langue> findAll() {
-		return langueRepository.findAll();
-
-	}
-
-	@Override
-	public Langue findOne(long id) {
-		return langueRepository.findById(id).orElse(null);
-
-	}
-
-	@Override
-	public Langue AddOne(Langue langue) {
-		return langueRepository.save(langue);
-	}
-
-	@Override
-	public void DeleteOne(long id) {
-		langueRepository.deleteById(id);
+	public Page<LangueDTO> getAllLangues(Pageable pageable) {
+		Page<Langue> langues=langueRepository.findAll(pageable);
+		return langues.map(LangueMapper::convertToDto);
 		
+	}
+
+
+	@Override
+	public LangueDTO addOneLangue(LangueDTO langue) {
+		return LangueMapper.convertToDto(langueRepository.save(LangueMapper.convertToEntity(langue)));
+
+	}
+
+	@Override
+	public void deleteOneLangue(long id) {
+		langueRepository.deleteById(id);		
+	}
+
+
+
+	@Override
+	public Optional<LangueDTO> findOneLangue(long id) {
+		return langueRepository.findById(id).map(LangueMapper::convertToDto);
+
 	}
 
 	@Override
 	public List<Langue> findLangueByNom(String nom) {
 		return langueRepository.findByNom( nom);
+	}
+
+
+	@Override
+	public LangueDTO assignCoursToLangue(long id, Cours cours) {
+		Langue langue=langueRepository.findById(id).orElse(null);
+		if(langue!=null)
+		{
+			cours.setLangue(langue);
+			coursRepository.save(cours);
+			return LangueMapper.convertToDto(langue);
+		}
+		
+		return null;
 	}
 
 

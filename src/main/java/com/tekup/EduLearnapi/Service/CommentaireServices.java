@@ -1,13 +1,14 @@
 package com.tekup.EduLearnapi.Service;
 
-import java.util.List;
-
-import com.tekup.EduLearnapi.model.Commentaire;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.tekup.EduLearnapi.dto.CommentaireDTO;
 
 public interface CommentaireServices {
 
-	public List<Commentaire> findAll();
-	public Commentaire findOne(long id);
-	public Commentaire AddOne(Commentaire commentaire, long idUser);
-	public void DeleteOne(long id);
+	public Page<CommentaireDTO> getAllCommentaires(Pageable pageable) ;
+	public CommentaireDTO addOneCommentaire(CommentaireDTO commentaire);
+	public void deleteOneCommentaire(long id);
+	public Optional<CommentaireDTO> findOneCommentaire(long id);
 }

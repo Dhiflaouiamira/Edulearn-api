@@ -52,7 +52,7 @@ public class User extends BaseEntity {
     private Date dateDeNaissance;
 
     @Column(nullable = false, unique = true)
-    private String telephone;
+    private double telephone;
 
     @Column(nullable = false, unique = true)
     @NotBlank

@@ -34,7 +34,7 @@ public class Chapitre extends BaseEntity {
     private String description;
 
     @Column(nullable = false)
-    private Integer ordre;
+    private int ordre;
     
     @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private Cours cours;

@@ -28,7 +28,7 @@ public class Paiement extends BaseEntity{
 
     @Column(nullable = false)
     @NotBlank
-    private Double montant;
+    private double montant;
 
     @Column(nullable = false)
     private Date datePaiement;

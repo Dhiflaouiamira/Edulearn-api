@@ -2,7 +2,11 @@ package com.tekup.EduLearnapi.controller;
 
 import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.Service.CoursServices;
+import com.tekup.EduLearnapi.dto.CoursDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,25 +19,23 @@ public class CoursController {
     private CoursServices coursServices;
 
     @GetMapping
-    public List<Cours> findAllCourses() {
-        return coursServices.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Cours findOneCourse(@PathVariable long id) {
-        return coursServices.findOne(id);
+    public Page<CoursDTO> getCours(Pageable pageable)
+    {
+    	return coursServices.getAllCours(pageable);
     }
 
     @PostMapping
-    public Cours addCourse(@RequestBody Cours cours) {
-        return coursServices.AddOne(cours);
+    public CoursDTO addOneCours(@RequestBody CoursDTO cours)
+    {
+    return coursServices.addOneCours(cours);	
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable long id) {
-        coursServices.DeleteOne(id);
+    public void deleteOneCours(@PathVariable long id)
+    {
+    coursServices.deleteOneCours(id);	
+    
     }
-
     @GetMapping("/byTitre")
     public List<Cours> findCoursesByTitre(@RequestParam String titre) {
         return coursServices.findCoursesByTitre(titre);

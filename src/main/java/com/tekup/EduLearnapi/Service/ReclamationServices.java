@@ -1,13 +1,16 @@
 package com.tekup.EduLearnapi.Service;
 
-import java.util.List;
+import java.util.Optional;
 
-import com.tekup.EduLearnapi.model.Reclamation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
 
 public interface ReclamationServices {
 
-	public List<Reclamation> findAll();
-	public Reclamation findOne(long id);
-	public Reclamation AddOne(Reclamation reclamation);
-	public void DeleteOne(long id);
+	public Page<ReclamationDTO> getAllReclamations(Pageable pageable) ;
+	public ReclamationDTO addOneReclamation(ReclamationDTO reclamation);
+	public void deleteOneReclamation(long id);
+	public Optional<ReclamationDTO> findOneReclamation(long id);
 }

@@ -1,9 +1,13 @@
 package com.tekup.EduLearnapi.Service;
 
-import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
+import com.tekup.EduLearnapi.mappers.ReclamationMapper;
 import com.tekup.EduLearnapi.model.Reclamation;
 import com.tekup.EduLearnapi.repository.ReclamationRepository;
 
@@ -14,27 +18,30 @@ public class ReclamationServicesImpl implements ReclamationServices {
 	ReclamationRepository reclamationRepository;
 
 	@Override
-	public List<Reclamation> findAll() {
-		return reclamationRepository.findAll();
-
-	}
-
-	@Override
-	public Reclamation findOne(long id) {
-		return reclamationRepository.findById(id).orElse(null);
-
-	}
-
-	@Override
-	public Reclamation AddOne(Reclamation reclamation) {
-		return reclamationRepository.save(reclamation);
-
-	}
-
-	@Override
-	public void DeleteOne(long id) {
-		reclamationRepository.deleteById(id);
+	public Page<ReclamationDTO> getAllReclamations(Pageable pageable) {
+		Page<Reclamation> reclamations=reclamationRepository.findAll(pageable);
+		return reclamations.map(ReclamationMapper::convertToDto);
 		
+	}
+
+
+	@Override
+	public ReclamationDTO addOneReclamation(ReclamationDTO reclamation) {
+		return ReclamationMapper.convertToDto(reclamationRepository.save(ReclamationMapper.convertToEntity(reclamation)));
+
+	}
+
+	@Override
+	public void deleteOneReclamation(long id) {
+		reclamationRepository.deleteById(id);		
+	}
+
+
+
+	@Override
+	public Optional<ReclamationDTO> findOneReclamation(long id) {
+		return reclamationRepository.findById(id).map(ReclamationMapper::convertToDto);
+
 	}
 
 }
