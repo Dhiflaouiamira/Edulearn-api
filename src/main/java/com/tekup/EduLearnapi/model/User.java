@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -28,6 +31,10 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Enumerated(EnumType.STRING)
+	private Set<Role> roles;
+
     @Column(nullable = false)
     @NotBlank
     private String nom;
@@ -41,12 +48,9 @@ public class User extends BaseEntity {
     @NotBlank
     private String email;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     @NotBlank
     private String password;
-
-    @Column(nullable = false)
-    private String role;
 
     @Column(nullable = false)
     private Date dateDeNaissance;
@@ -57,26 +61,19 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     @NotBlank
     private String cin;
-    
-    
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<Cours> cours;
-    
+
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Commentaire> commentaires;
 
-   
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Reclamation> reclamations;
-    
+
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Paiement> paiements;
-    
-    
-    
-   
-
 }

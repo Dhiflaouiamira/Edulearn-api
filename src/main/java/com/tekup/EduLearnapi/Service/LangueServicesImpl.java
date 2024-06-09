@@ -1,13 +1,16 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.LangueDTO;
+import com.tekup.EduLearnapi.mappers.CoursMapper;
 import com.tekup.EduLearnapi.mappers.LangueMapper;
 import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Langue;
@@ -61,18 +64,19 @@ public class LangueServicesImpl implements LangueServices{
 
 
 	@Override
-	public LangueDTO assignCoursToLangue(long id, Cours cours) {
-		Langue langue=langueRepository.findById(id).orElse(null);
-		if(langue!=null)
-		{
-			cours.setLangue(langue);
-			coursRepository.save(cours);
-			return LangueMapper.convertToDto(langue);
-		}
-		
-		return null;
+	public LangueDTO assignCoursToLangue(long id, CoursDTO coursDTO) {
+	    Langue langue = langueRepository.findById(id).orElse(null);
+	    if (langue != null) {
+	        Cours cours = CoursMapper.convertToEntity(coursDTO); 
+	        cours.setLangue(langue);
+	        coursRepository.save(cours);
+	        return LangueMapper.convertToDto(langue);
+	    }
+	    
+	    return null;
 	}
 
+	
 
 
 	}

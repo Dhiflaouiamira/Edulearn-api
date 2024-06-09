@@ -1,15 +1,21 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.List;
+
+
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.tekup.EduLearnapi.dto.CategorieDTO;
+import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
 import com.tekup.EduLearnapi.mappers.CategorieMapper;
+import com.tekup.EduLearnapi.mappers.ChapitreMapper;
+import com.tekup.EduLearnapi.mappers.CommentaireMapper;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 import com.tekup.EduLearnapi.mappers.PaiementMapper;
 import com.tekup.EduLearnapi.model.Categorie;
@@ -22,6 +28,7 @@ import com.tekup.EduLearnapi.repository.CoursRepository;
 
 
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
@@ -70,25 +77,30 @@ public class CoursServicesImpl implements CoursServices{
 	}
 	
 	@Override
-	public CoursDTO assignCommentaireToCours(long id, Commentaire commentaire) {
+	public CoursDTO assignCommentaireToCours(long id, CommentaireDTO commentaire) {
 		Cours cours=coursRepository.findById(id).orElse(null);
 		if(cours!=null)
 		{
-			commentaire.setCours(cours);
-			commentaireRepository.save(commentaire);
+			Commentaire cmt=CommentaireMapper.convertToEntity(commentaire);
+			cmt.setCours(cours);
+			commentaireRepository.save(cmt);
 			return CoursMapper.convertToDto(cours);
 		}
 		
 		return null;
 	}
 	
+	
+	
 	@Override
-	public CoursDTO assignChapitreToCours(long id, Chapitre chapitre) {
+	public CoursDTO assignChapitreToCours(long id, ChapitreDTO chapitre) {
 		Cours cours=coursRepository.findById(id).orElse(null);
 		if(cours!=null)
 		{
-			chapitre.setCours(cours);
-			chapitreRepository.save(chapitre);
+			Chapitre cha=ChapitreMapper.convertToEntity(chapitre);
+
+			cha.setCours(cours);
+			chapitreRepository.save(cha);
 			return CoursMapper.convertToDto(cours);
 		}
 		

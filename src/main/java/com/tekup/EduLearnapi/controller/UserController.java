@@ -2,14 +2,15 @@ package com.tekup.EduLearnapi.controller;
 
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.tekup.EduLearnapi.Service.UserServices;
+import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
+import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
-import com.tekup.EduLearnapi.model.Commentaire;
-import com.tekup.EduLearnapi.model.Paiement;
-import com.tekup.EduLearnapi.model.Reclamation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,19 +43,19 @@ public class UserController {
     }
    
     @PostMapping("/commentaire/{id}")
-    public UserDTO assignToCommentaire(@PathVariable long id,@RequestBody Commentaire commentaire)
+    public UserDTO assignToCommentaire(@PathVariable long id,@RequestBody CommentaireDTO commentaire)
     {
     return userServices.assignCommentaireToUser(id, commentaire);	
     }
     
     @PostMapping("/reclamation/{id}")
-    public UserDTO assignToReclamation(@PathVariable long id,@RequestBody Reclamation reclamation)
+    public UserDTO assignToReclamation(@PathVariable long id,@RequestBody ReclamationDTO reclamation)
     {
     return userServices.assignReclamationToUser(id, reclamation);	
     }
     
     @PostMapping("/paiement/{id}")
-    public UserDTO assignToPaiement(@PathVariable long id,@RequestBody Paiement paiement)
+    public UserDTO assignToPaiement(@PathVariable long id,@RequestBody PaiementDTO paiement)
     {
     return userServices.assignPaiementToUser(id, paiement);	
     }

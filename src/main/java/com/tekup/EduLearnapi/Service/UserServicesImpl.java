@@ -1,15 +1,24 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.Optional;
+
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
+import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
+import com.tekup.EduLearnapi.mappers.CommentaireMapper;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
+import com.tekup.EduLearnapi.mappers.PaiementMapper;
+import com.tekup.EduLearnapi.mappers.ReclamationMapper;
 import com.tekup.EduLearnapi.mappers.UserMapper;
 import com.tekup.EduLearnapi.model.Commentaire;
 import com.tekup.EduLearnapi.model.Cours;
@@ -36,6 +45,10 @@ public class UserServicesImpl implements UserServices {
 	
 	private final PaiementRepository paiementRepository ;
 
+	
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 	@Override
 	public Page<UserDTO> getAllUsers(Pageable pageable) {
 		Page<User> users=userRepository.findAll(pageable);
@@ -46,6 +59,7 @@ public class UserServicesImpl implements UserServices {
 
 	@Override
 	public UserDTO addOneUser(UserDTO user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return UserMapper.convertToDto(userRepository.save(UserMapper.convertToEntity(user)));
 
 	}
@@ -66,12 +80,13 @@ public class UserServicesImpl implements UserServices {
 
 
 	@Override
-	public UserDTO assignCommentaireToUser(long id, Commentaire commentaire) {
+	public UserDTO assignCommentaireToUser(long id, CommentaireDTO commentaire) {
 		User user=userRepository.findById(id).orElse(null);
 		if(user!=null)
 		{
-			commentaire.setUser(user);
-			commentaireRepository.save(commentaire);
+			Commentaire cmt=CommentaireMapper.convertToEntity(commentaire);
+			cmt.setUser(user);
+			commentaireRepository.save(cmt);
 			return UserMapper.convertToDto(user);
 		}
 		
@@ -82,12 +97,13 @@ public class UserServicesImpl implements UserServices {
 
 
 	@Override
-	public UserDTO assignReclamationToUser(long id, Reclamation reclamation) {
+	public UserDTO assignReclamationToUser(long id, ReclamationDTO reclamation) {
 		User user=userRepository.findById(id).orElse(null);
 		if(user!=null)
 		{
-			reclamation.setUser(user);
-			reclamationRepository.save(reclamation);
+			Reclamation rec=ReclamationMapper.convertToEntity(reclamation);
+			rec.setUser(user);
+			reclamationRepository.save(rec);
 			return UserMapper.convertToDto(user);
 		}
 		return null;
@@ -97,12 +113,13 @@ public class UserServicesImpl implements UserServices {
 
 
 	@Override
-	public UserDTO assignPaiementToUser(long id, Paiement paiement) {
+	public UserDTO assignPaiementToUser(long id, PaiementDTO paiement) {
 		User user=userRepository.findById(id).orElse(null);
 		if(user!=null)
 		{
-			paiement.setUser(user);
-			paiementRepository.save(paiement);
+			Paiement pai=PaiementMapper.convertToEntity(paiement);
+			pai.setUser(user);
+			paiementRepository.save(pai);
 			return UserMapper.convertToDto(user);
 		}
 		return null;

@@ -2,45 +2,46 @@ package com.tekup.EduLearnapi.dto;
 
 import java.util.Date;
 
+
 import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 public class UserDTO {
 
-	  @Column(nullable = false)
 	    @NotBlank
 	    private String nom;
 
-	    @Column(nullable = false)
 	    @NotBlank
 	    private String prenom;
 
 	    @Email
-	    @Column(nullable = false, unique = true)
 	    @NotBlank
 	    private String email;
 
-	    @Column(nullable = false,unique = true)
 	    @NotBlank
 	    private String password;
 
-	    @Column(nullable = false)
 	    private String role;
-
-	    @Column(nullable = false)
+	    
+        @Positive
 	    private Date dateDeNaissance;
-
-	    @Column(nullable = false, unique = true)
+	    
+        @Positive
 	    private String telephone;
 
-	    @Column(nullable = false, unique = true)
 	    @NotBlank
 	    private String cin;
 	    
