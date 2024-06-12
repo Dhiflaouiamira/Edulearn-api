@@ -20,10 +20,10 @@ public class UserInfoDetails implements UserDetails {
     String password = null;
     List<GrantedAuthority> authorities;
 
-    public UserInfoDetails(User userInfo) {
-        this.userName = userInfo.getEmail();
-        this.password = userInfo.getPassword();
-        this.authorities = userInfo.getRoles().stream()
+    public UserInfoDetails(User user) {
+        this.userName = user.getNom();
+        this.password = user.getPassword();
+        this.authorities = user.getRoles().stream()
             .map(role -> new SimpleGrantedAuthority(role.name()))
             .collect(Collectors.toList());
     }
