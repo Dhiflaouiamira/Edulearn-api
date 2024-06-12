@@ -3,7 +3,6 @@ package com.tekup.EduLearnapi.controller;
 import com.tekup.EduLearnapi.model.Cours;
 
 import com.tekup.EduLearnapi.Service.CoursServices;
-import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

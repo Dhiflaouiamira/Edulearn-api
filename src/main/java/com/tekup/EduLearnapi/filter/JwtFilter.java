@@ -2,6 +2,7 @@ package com.tekup.EduLearnapi.filter;
 
 
 import jakarta.servlet.FilterChain;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.tekup.EduLearnapi.Service.JwtService;
 import com.tekup.EduLearnapi.Service.UserInfoService;
-import com.tekup.EduLearnapi.Service.UserServices;
 
 import java.io.IOException;
 

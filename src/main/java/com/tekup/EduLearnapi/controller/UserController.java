@@ -2,9 +2,16 @@ package com.tekup.EduLearnapi.controller;
 
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import com.tekup.EduLearnapi.Service.UserServices;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
@@ -12,30 +19,40 @@ import com.tekup.EduLearnapi.dto.PaiementDTO;
 import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     private final UserServices userServices;
+  
 
     @GetMapping
-    public Page<UserDTO> getUsers(Pageable pageable)
-    {
-    	return userServices.getAllUsers(pageable);
+    @PreAuthorize("hasAuthority('ADMIN_ROLES')")
+    public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
+        Page<UserDTO> users = userServices.getAllUsers(pageable);
+        return ResponseEntity.ok(users);
     }
-
-    @PostMapping
-    public UserDTO addOneUser(@RequestBody UserDTO user)
-    {
-    return userServices.addOneUser(user);	
+    
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ADMIN_ROLES')")
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO user) {
+        UserDTO createdUser = userServices.addOneUser(user);
+        return ResponseEntity.ok(createdUser);
     }
-
+    
+    @GetMapping("/getUsers/{id}")
+    @PreAuthorize("hasAuthority('USER_ROLES')")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        Optional<UserDTO> userOptional = userServices.findOneUser(id);
+        return userOptional.map(ResponseEntity::ok)
+                           .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+    
+    
     @DeleteMapping("/{id}")
     public void deleteOneUser(@PathVariable long id)
     {
