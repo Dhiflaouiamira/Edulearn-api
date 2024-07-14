@@ -26,4 +26,7 @@ public class CommentaireDTO {
 	    
 	    @JsonIgnoreProperties("commemtaires")
         private CoursDTO cours;
+	    
+	    @JsonIgnoreProperties("commemtaires")
+	    private BlogDTO blog;
 }

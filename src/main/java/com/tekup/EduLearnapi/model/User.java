@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.model;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -76,4 +77,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Paiement> paiements;
+    
+    @OneToMany(mappedBy = "user")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Blog> blogs;
 }

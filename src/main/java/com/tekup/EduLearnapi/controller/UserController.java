@@ -36,12 +36,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
     
-    @PostMapping("/add")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO user) {
-        UserDTO createdUser = userServices.addOneUser(user);
-        return ResponseEntity.ok(createdUser);
-    }
+ 
     
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
@@ -59,13 +54,11 @@ public class UserController {
     }
    
     @PostMapping("/commentaire/{id}")
-    @PreAuthorize("hasAuthority('ETUDIANT')")
     public UserDTO assignToCommentaire(@PathVariable long id,@RequestBody CommentaireDTO commentaire) {
         return userServices.assignCommentaireToUser(id, commentaire);	
     }
     
     @PostMapping("/reclamation/{id}")
-    @PreAuthorize("hasAuthority('ETUDIANT')")
     public UserDTO assignToReclamation(@PathVariable long id,@RequestBody ReclamationDTO reclamation) {
         return userServices.assignReclamationToUser(id, reclamation);	
     }
@@ -77,7 +70,6 @@ public class UserController {
     }
     
     @PostMapping("/Cours/{id}")
-    @PreAuthorize("hasAuthority('ETUDIANT')")
     public UserDTO assignToCours(@PathVariable long id, @RequestBody CoursDTO cours) {
         return userServices.assignCoursToUser(id, cours);	
     }

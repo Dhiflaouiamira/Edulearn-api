@@ -2,6 +2,7 @@ package com.tekup.EduLearnapi.Service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import com.tekup.EduLearnapi.repository.ReunionRepository;
 @Service
 public class ReunionServicesImpl implements ReunionServices {
 
-	
+	@Autowired
 	ReunionRepository reunionRepository;
 
 	@Override

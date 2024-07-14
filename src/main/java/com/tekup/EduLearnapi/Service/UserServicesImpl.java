@@ -36,13 +36,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServicesImpl implements UserServices {
 
-
+	@Autowired
 	private final UserRepository userRepository;
-	
+	@Autowired
 	private final CommentaireRepository  commentaireRepository ;
-	
+	@Autowired
 	private final ReclamationRepository reclamationRepository ;
-	
+	@Autowired
 	private final PaiementRepository paiementRepository ;
 
 	

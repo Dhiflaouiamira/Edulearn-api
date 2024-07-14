@@ -39,5 +39,9 @@ public class Commentaire extends BaseEntity {
     @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "cours_id", nullable = false)
     private Cours cours;
+    
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+    @JoinColumn(name = "blog_id", nullable = false)
+    private Blog blog;
 
 }

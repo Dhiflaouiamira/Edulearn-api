@@ -1,6 +1,8 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import com.tekup.EduLearnapi.repository.CommentaireRepository;
 
 @Service
 public class CommentaireServicesImpl implements CommentaireServices{
-
+	@Autowired
 	CommentaireRepository commentaireRepository;
 
 	@Override

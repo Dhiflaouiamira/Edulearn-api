@@ -5,6 +5,8 @@ import java.util.List;
 
 import java.util.Optional;
 import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,9 +35,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CoursServicesImpl implements CoursServices{
-
+	@Autowired
 	private final CoursRepository coursRepository;
+	@Autowired
 	private final CommentaireRepository commentaireRepository;
+	@Autowired
 	private final ChapitreRepository chapitreRepository;
 
 	@Override
