@@ -2,11 +2,13 @@ package com.tekup.EduLearnapi.Service;
 
 
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.tekup.EduLearnapi.model.User;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,10 +24,11 @@ public class UserInfoDetails implements UserDetails {
 
     public UserInfoDetails(User user) {
         this.userName = user.getNom();
-        this.password = user.getPassword();
-        this.authorities = user.getRoles().stream()
-            .map(role -> new SimpleGrantedAuthority(role.name()))
-            .collect(Collectors.toList());
+        password= user.getPassword();
+        authorities= Arrays.stream(user.getRole().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.tekup.EduLearnapi.dto;
 import java.util.Date;
 
 
+
 import java.util.List;
 import java.util.Set;
 
@@ -33,17 +34,23 @@ public class UserDTO {
 
 	    @NotBlank
 	    private String password;
-
+	    
+	    @NotBlank
 	    private String role;
 	    
         @Positive
 	    private Date dateDeNaissance;
 	    
         @Positive
-	    private String telephone;
+	    private double telephone;
 
 	    @NotBlank
 	    private String cin;
+	    
+	    @NotBlank
+	    private String genre;
+	    
+	    private byte[] photo;
 	    
 	    @JsonIgnoreProperties("user")
 	    private List<CommentaireDTO> commentaires;

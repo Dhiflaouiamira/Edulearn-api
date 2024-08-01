@@ -2,15 +2,14 @@ package com.tekup.EduLearnapi.model;
 
 import lombok.AllArgsConstructor;
 
+
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -32,18 +31,25 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Enumerated(EnumType.STRING)
-	private Set<Role> roles;
+	
 
     @Column(nullable = false)
     @NotBlank
     private String nom;
+    
+    @Column(nullable = false)
+    @NotBlank
+    private String role;
 
     @Column(nullable = false)
     @NotBlank
     private String prenom;
 
+
+    @Column(nullable = false)
+    @NotBlank
+    private String genre;
+    
     @Email
     @Column(nullable = false, unique = true)
     @NotBlank
@@ -56,6 +62,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Date dateDeNaissance;
 
+    @Column(nullable = false)
+    private byte[] photo;
+    
     @Column(nullable = false, unique = true)
     private double telephone;
 

@@ -24,5 +24,6 @@ public interface UserServices {
 	public UserDTO assignReclamationToUser(long id,ReclamationDTO reclamation);
 	public UserDTO assignPaiementToUser(long id,PaiementDTO paiement);
 	public UserDTO assignCoursToUser(long id,CoursDTO cours);
+	public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO);
 
 }

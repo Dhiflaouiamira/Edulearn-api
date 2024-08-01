@@ -37,7 +37,13 @@ public class UserController {
     }
     
  
-    
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
+        UserDTO savedUser = userServices.addOneUser(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
@@ -46,6 +52,13 @@ public class UserController {
                            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
     
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        Optional<UserDTO> updatedUser = userServices.updateOneUser(id, userDTO);
+        return updatedUser.map(ResponseEntity::ok)
+                          .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
     
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

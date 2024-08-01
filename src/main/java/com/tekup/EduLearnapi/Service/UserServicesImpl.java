@@ -138,7 +138,23 @@ public class UserServicesImpl implements UserServices {
 		}
 		
 		return null;
-	}	
-	
+	}
+
+	public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO) {
+        return userRepository.findById(id).map(user -> {
+            user.setNom(userDTO.getNom());
+            user.setRole(userDTO.getRole());
+            user.setPrenom(userDTO.getPrenom());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            user.setDateDeNaissance(userDTO.getDateDeNaissance());
+            user.setTelephone(userDTO.getTelephone());
+            user.setCin(userDTO.getCin());
+            user.setPhoto(userDTO.getPhoto());
+            user.setGenre(userDTO.getGenre());
+            userRepository.save(user);
+            return new UserDTO();
+        });
+    }
 
 }
