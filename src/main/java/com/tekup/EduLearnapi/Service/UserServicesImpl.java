@@ -150,7 +150,6 @@ public class UserServicesImpl implements UserServices {
             user.setDateDeNaissance(userDTO.getDateDeNaissance());
             user.setTelephone(userDTO.getTelephone());
             user.setCin(userDTO.getCin());
-            user.setPhoto(userDTO.getPhoto());
             user.setGenre(userDTO.getGenre());
             userRepository.save(user);
             return new UserDTO();

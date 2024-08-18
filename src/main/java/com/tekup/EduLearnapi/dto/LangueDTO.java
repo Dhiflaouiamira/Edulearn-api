@@ -2,7 +2,7 @@ package com.tekup.EduLearnapi.dto;
 
 
 
-import java.util.Date;
+
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -18,11 +18,11 @@ import lombok.ToString;
 @ToString
 public class LangueDTO {
 
-	  @NotBlank
-	    private Double nom;
+	    @NotBlank
+	    private String nom;
 
 	    @NotBlank	    
-	    private Date code;
+	    private String code;
 	    
 	    @JsonIgnoreProperties("langue")
 	    private List<CoursDTO> cours;

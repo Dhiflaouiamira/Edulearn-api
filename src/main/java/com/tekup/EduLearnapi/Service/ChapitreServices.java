@@ -12,4 +12,5 @@ public interface ChapitreServices {
 	public ChapitreDTO addOneChapitre(ChapitreDTO chapitre);
 	public void deleteOneChapitre(long id);
 	public Optional<ChapitreDTO> findOneChapitre(long id);
+    public Optional<ChapitreDTO> updateOneChapitre(Long id, ChapitreDTO chapitreDTO) ;
 }

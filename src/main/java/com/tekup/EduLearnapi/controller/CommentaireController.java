@@ -1,45 +1,56 @@
 package com.tekup.EduLearnapi.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.CommentaireServices;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
-
 
 @RestController
 @RequestMapping("/api/commentaires")
 public class CommentaireController {
 
-	 @Autowired
-	    private CommentaireServices commentaireServices;
+    @Autowired
+    private CommentaireServices commentaireServices;
 
-	 @GetMapping
-	    public Page<CommentaireDTO> getCommentaires(Pageable pageable)
-	    {
-	    	return commentaireServices.getAllCommentaires(pageable);
-	    }
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR') or hasAuthority('ETUDIANT')")
+    public ResponseEntity<Page<CommentaireDTO>> getCommentaires(Pageable pageable) {
+        Page<CommentaireDTO> commentaires = commentaireServices.getAllCommentaires(pageable);
+        return ResponseEntity.ok(commentaires);
+    }
 
-	    @PostMapping
-	    public CommentaireDTO addOneCommentaire(@RequestBody CommentaireDTO commentaire)
-	    {
-	    return commentaireServices.addOneCommentaire(commentaire);	
-	    }
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    public ResponseEntity<CommentaireDTO> addOneCommentaire(@RequestBody CommentaireDTO commentaireDTO) {
+        CommentaireDTO addedCommentaire = commentaireServices.addOneCommentaire(commentaireDTO);
+        return ResponseEntity.ok(addedCommentaire);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public void deleteOneCommentaire(@PathVariable long id)
-	    {
-	    commentaireServices.deleteOneCommentaire(id);	
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteOneCommentaire(@PathVariable long id) {
+        commentaireServices.deleteOneCommentaire(id);
+        return ResponseEntity.noContent().build();
+    }
 
-	    }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR') or hasAuthority('ETUDIANT')")
+    public ResponseEntity<CommentaireDTO> findOneCommentaire(@PathVariable long id) {
+        return commentaireServices.findOneCommentaire(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    public ResponseEntity<CommentaireDTO> updateCommentaire(@PathVariable long id, @RequestBody CommentaireDTO commentaireDTO) {
+        return commentaireServices.updateOneCommentaire(id, commentaireDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

@@ -62,9 +62,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Date dateDeNaissance;
 
-    @Column(nullable = false)
-    private byte[] photo;
-    
+ 
     @Column(nullable = false, unique = true)
     private double telephone;
 

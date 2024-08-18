@@ -11,4 +11,5 @@ public interface CategorieServices {
 	public CategorieDTO addOneCategorie(CategorieDTO categorie);
 	public void deleteOneCategorie(long id);
 	public Optional<CategorieDTO> findOneCategorie(long id);
+	public Optional<CategorieDTO> updateOneCategorie(Long id, CategorieDTO categorieDTO);
 }

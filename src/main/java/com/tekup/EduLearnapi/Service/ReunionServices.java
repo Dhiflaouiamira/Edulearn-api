@@ -13,4 +13,5 @@ public interface ReunionServices {
 	public ReunionDTO addOneReunion(ReunionDTO reunion);
 	public void deleteOneReunion(long id);
 	public Optional<ReunionDTO> findOneReunion(long id);
+	public Optional<ReunionDTO> updateOneReunion(Long id, ReunionDTO reunionDTO);
 }

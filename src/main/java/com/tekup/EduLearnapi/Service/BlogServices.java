@@ -14,4 +14,5 @@ public interface BlogServices {
 	public BlogDTO addOneBlog(BlogDTO blog);
 	public void deleteOneBlog(long id);
 	public Optional<BlogDTO> findOneBlog(long id);
+	 public Optional<BlogDTO> updateOneBlog(Long id, BlogDTO blogDTO);
 }

@@ -2,6 +2,7 @@ package com.tekup.EduLearnapi.controller;
 
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,7 +23,7 @@ import com.tekup.EduLearnapi.dto.UserDTO;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -34,6 +35,8 @@ public class UserController {
     public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
         Page<UserDTO> users = userServices.getAllUsers(pageable);
         return ResponseEntity.ok(users);
+        
+       
     }
     
  
@@ -77,7 +80,7 @@ public class UserController {
     }
     
     @PostMapping("/paiement/{id}")
-    @PreAuthorize("hasAuthority('ETUDIANT')")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public UserDTO assignToPaiement(@PathVariable long id,@RequestBody PaiementDTO paiement) {
         return userServices.assignPaiementToUser(id, paiement);	
     }

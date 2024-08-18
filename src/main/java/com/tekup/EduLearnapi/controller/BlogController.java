@@ -3,45 +3,58 @@ package com.tekup.EduLearnapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.BlogServices;
 import com.tekup.EduLearnapi.dto.BlogDTO;
 
+@RestController
+@RequestMapping("/api/blogs")
+public class BlogController {
 
-	@RestController
-	@RequestMapping("/api/blogs")
-	public class BlogController {
+    @Autowired
+    private BlogServices blogServices;
 
-		 @Autowired
-		    private BlogServices blogServices;
+    // Get all blogs with pagination
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    public ResponseEntity<Page<BlogDTO>> getBlogs(Pageable pageable) {
+        Page<BlogDTO> blogs = blogServices.getAllBlogs(pageable);
+        return ResponseEntity.ok(blogs);
+    }
 
-		 @GetMapping
-		    public Page<BlogDTO> getBlogs(Pageable pageable)
-		    {
-		    	return blogServices.getAllBlogs(pageable);
-		    }
+    // Get a blog by ID
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    public ResponseEntity<BlogDTO> getBlogById(@PathVariable long id) {
+        return blogServices.findOneBlog(id)
+                .map(blog -> ResponseEntity.ok(blog))
+                .orElse(ResponseEntity.notFound().build());
+    }
 
-		    @PostMapping
-		    public BlogDTO addOneBlog(@RequestBody BlogDTO blog)
-		    {
-		    return blogServices.addOneBlog(blog);	
-		    }
+    // Add a new blog
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<BlogDTO> addOneBlog(@RequestBody BlogDTO blogDTO) {
+        BlogDTO createdBlog = blogServices.addOneBlog(blogDTO);
+        return ResponseEntity.status(201).body(createdBlog);
+    }
 
-		    @DeleteMapping("/{id}")
-		    public void deleteOneBlog(@PathVariable long id)
-		    {
-		    blogServices.deleteOneBlog(id);	
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<BlogDTO> updateOneBlog(@PathVariable long id, @RequestBody BlogDTO blogDTO) {
+        return blogServices.updateOneBlog(id, blogDTO)
+                .map(updatedBlog -> ResponseEntity.ok(updatedBlog))
+                .orElse(ResponseEntity.notFound().build());
+    }
 
-		    }
-		    }
-	
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteOneBlog(@PathVariable long id) {
+        blogServices.deleteOneBlog(id);
+        return ResponseEntity.noContent().build();
+    }
 
-	
-
+}

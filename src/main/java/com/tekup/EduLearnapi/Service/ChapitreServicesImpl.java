@@ -44,4 +44,14 @@ public class ChapitreServicesImpl implements ChapitreServices {
 		return chapitreRepository.findById(id).map(ChapitreMapper::convertToDto);
 
 	}
+
+	  @Override
+	    public Optional<ChapitreDTO> updateOneChapitre(Long id, ChapitreDTO chapitreDTO) {
+	        return chapitreRepository.findById(id).map(chapitre -> {
+	            chapitre.setTitre(chapitreDTO.getTitre());
+	            chapitre.setDescription(chapitreDTO.getDescription());
+	            chapitre.setOrdre(chapitreDTO.getOrdre());
+	            return ChapitreMapper.convertToDto(chapitreRepository.save(chapitre));
+	        });
+	    }
 }

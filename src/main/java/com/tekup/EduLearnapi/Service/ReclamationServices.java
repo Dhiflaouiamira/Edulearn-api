@@ -13,4 +13,5 @@ public interface ReclamationServices {
 	public ReclamationDTO addOneReclamation(ReclamationDTO reclamation);
 	public void deleteOneReclamation(long id);
 	public Optional<ReclamationDTO> findOneReclamation(long id);
+	public Optional<ReclamationDTO> updateOneReclamation(Long id, ReclamationDTO reclamationDTO);
 }

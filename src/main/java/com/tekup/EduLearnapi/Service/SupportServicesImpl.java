@@ -2,6 +2,7 @@ package com.tekup.EduLearnapi.Service;
 
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,4 +45,20 @@ public class SupportServicesImpl implements SupportServices {
 
 	}
 
+
+	@Override
+	
+	public Optional<SupportDTO> updateOneSupport(Long id, SupportDTO supportDTO) {
+	    return supportRepository.findById(id).map(support -> {
+	        support.setTitre(supportDTO.getTitre());
+	        support.setDescription(supportDTO.getDescription());
+	        support.setFichierURL(supportDTO.getFichierURL());
+	        support.setDateCreation(supportDTO.getDateCreation());
+	        supportRepository.save(support);
+
+            return new SupportDTO();
+
+             });
+	   
+}
 }

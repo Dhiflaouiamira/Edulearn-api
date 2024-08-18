@@ -11,4 +11,5 @@ public interface CommentaireServices {
 	public CommentaireDTO addOneCommentaire(CommentaireDTO commentaire);
 	public void deleteOneCommentaire(long id);
 	public Optional<CommentaireDTO> findOneCommentaire(long id);
+    public Optional<CommentaireDTO> updateOneCommentaire(Long id, CommentaireDTO commentaireDTO) ;
 }

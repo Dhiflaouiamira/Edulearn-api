@@ -49,10 +49,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
         try {
+            // Set the role to "student"
+            userDTO.setRole("STUDENT");
+
+            // Add the user with the specified role
             userServices.addOneUser(userDTO);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed: " + e.getMessage());
         }
     }
+
 }

@@ -1,44 +1,61 @@
 package com.tekup.EduLearnapi.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.PaiementServices;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/paiements")
+@RequiredArgsConstructor
 public class PaiementController {
 
-	 @Autowired
-	    private PaiementServices paiementServices;
+    @Autowired
+    private final PaiementServices paiementServices;
 
-	 @GetMapping
-	    public Page<PaiementDTO> getPaiements(Pageable pageable)
-	    {
-	    	return paiementServices.getAllPaiements(pageable);
-	    }
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STUDENT')")
+    public ResponseEntity<Page<PaiementDTO>> getAllPaiements(Pageable pageable) {
+        Page<PaiementDTO> paiements = paiementServices.getAllPaiements(pageable);
+        return ResponseEntity.ok(paiements);
+    }
 
-	    @PostMapping
-	    public PaiementDTO addOnePaiement(@RequestBody PaiementDTO paiement)
-	    {
-	    return paiementServices.addOnePaiement(paiement);	
-	    }
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STUDENT')")
+    public ResponseEntity<PaiementDTO> addOnePaiement(@RequestBody PaiementDTO paiementDTO) {
+        PaiementDTO savedPaiement = paiementServices.addOnePaiement(paiementDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPaiement);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public void deleteOnePaiement(@PathVariable long id)
-	    {
-	    paiementServices.deleteOnePaiement(id);	
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STUDENT')")
+    public ResponseEntity<PaiementDTO> getPaiement(@PathVariable Long id) {
+        Optional<PaiementDTO> paiementOptional = paiementServices.findOnePaiement(id);
+        return paiementOptional.map(ResponseEntity::ok)
+                               .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
-	    }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<PaiementDTO> updatePaiement(@PathVariable Long id, @RequestBody PaiementDTO paiementDTO) {
+        Optional<PaiementDTO> updatedPaiement = paiementServices.updateOnePaiement(id, paiementDTO);
+        return updatedPaiement.map(ResponseEntity::ok)
+                              .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteOnePaiement(@PathVariable Long id) {
+        paiementServices.deleteOnePaiement(id);
+        return ResponseEntity.noContent().build();
+    }
 }
-

@@ -1,44 +1,60 @@
 package com.tekup.EduLearnapi.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.ReunionServices;
 import com.tekup.EduLearnapi.dto.ReunionDTO;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/reunions")
+@RequiredArgsConstructor
 public class ReunionController {
 
-	 @Autowired
-	    private ReunionServices reunionServices;
+    @Autowired
+    private final ReunionServices reunionServices;
 
-	 @GetMapping
-	    public Page<ReunionDTO> getReunions(Pageable pageable)
-	    {
-	    	return reunionServices.getAllReunions(pageable);
-	    }
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Page<ReunionDTO>> getAllReunions(Pageable pageable) {
+        Page<ReunionDTO> reunions = reunionServices.getAllReunions(pageable);
+        return ResponseEntity.ok(reunions);
+    }
 
-	    @PostMapping
-	    public ReunionDTO addOneReunion(@RequestBody ReunionDTO reunion)
-	    {
-	    return reunionServices.addOneReunion(reunion);	
-	    }
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ReunionDTO> addReunion(@RequestBody ReunionDTO reunionDTO) {
+        ReunionDTO savedReunion = reunionServices.addOneReunion(reunionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReunion);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public void deleteOneReunion(@PathVariable long id)
-	    {
-	    reunionServices.deleteOneReunion(id);	
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    public ResponseEntity<ReunionDTO> getReunion(@PathVariable Long id) {
+        Optional<ReunionDTO> reunionOptional = reunionServices.findOneReunion(id);
+        return reunionOptional.map(ResponseEntity::ok)
+                              .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
-	    }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ReunionDTO> updateReunion(@PathVariable Long id, @RequestBody ReunionDTO reunionDTO) {
+        Optional<ReunionDTO> updatedReunion = reunionServices.updateOneReunion(id, reunionDTO);
+        return updatedReunion.map(ResponseEntity::ok)
+                             .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteOneReunion(@PathVariable long id) {
+        reunionServices.deleteOneReunion(id);
+    }
 }
-

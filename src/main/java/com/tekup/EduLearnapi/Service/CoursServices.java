@@ -22,12 +22,13 @@ public interface CoursServices {
 	public CoursDTO addOneCours(CoursDTO cours);
 	public void deleteOneCours(long id);
 	public Optional<CoursDTO> findOneCours(long id);
-	public List<Cours> findCoursesByTitre(String titre);
-	public List<Cours> findCoursesBydesc(String description);
+	
 	public CoursDTO assignCommentaireToCours(long id,CommentaireDTO commentaire);
 	public CoursDTO assignChapitreToCours(long id,ChapitreDTO chapitre);
 	public CoursDTO assignPaiementToCours(long id,PaiementDTO paiementDTO);
 	public CoursDTO assignCategorieToCours(long id,CategorieDTO categorie);
+	public Optional<CoursDTO> updateOneCours(Long id, CoursDTO coursDTO);
 
-	
+	public List<Cours> findCoursesByTitre(String titre);
+	public List<Cours> findCoursesBydesc(String description);
 }

@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.model;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -76,10 +77,9 @@ public class Cours extends BaseEntity {
     @OneToMany(mappedBy = "cours")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Chapitre> chapitres;
-    
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Langue langue;
-    
     @OneToOne(mappedBy = "cours",cascade = CascadeType.ALL)
     private Paiement paiement;
     

@@ -19,5 +19,6 @@ public interface LangueServices {
 	public Optional<LangueDTO> findOneLangue(long id);
 	public List<Langue> findLangueByNom(String nom);
 	public LangueDTO assignCoursToLangue(long id,CoursDTO cours);
+	public Optional<LangueDTO> updateOneLangue(Long id, LangueDTO langueDTO);
 
 }

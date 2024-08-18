@@ -42,4 +42,19 @@ public class EvaluationServicesimpl implements EvaluationServices {
 		return evaluationRepository.findById(id).map(EvaluationMapper::convertToDto);
 
 	}
+
+
+	@Override
+	public Optional<EvaluationDTO> updateOneEvaluation(Long id, EvaluationDTO evaluationDTO) {
+        return evaluationRepository.findById(id).map(evaluation -> {
+            evaluation.setTitre(evaluationDTO.getTitre());
+            evaluation.setDescription(evaluationDTO.getDescription());
+            evaluation.setDateCreation(evaluationDTO.getDateCreation());
+            evaluation.setDateLimite(evaluationDTO.getDateLimite());
+            evaluation.setCoefficient(evaluationDTO.getCoefficient());
+
+            evaluationRepository.save(evaluation);
+            return new EvaluationDTO();
+        });
+    }
 }

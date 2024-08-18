@@ -13,4 +13,5 @@ public interface SupportServices {
 	public SupportDTO addOneSupport(SupportDTO support);
 	public void deleteOneSupport(long id);
 	public Optional<SupportDTO> findOneSupport(long id);
+	public Optional<SupportDTO> updateOneSupport(Long id, SupportDTO supportDTO);
 }

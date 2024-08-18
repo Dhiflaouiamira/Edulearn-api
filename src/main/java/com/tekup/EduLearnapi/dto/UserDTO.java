@@ -50,7 +50,6 @@ public class UserDTO {
 	    @NotBlank
 	    private String genre;
 	    
-	    private byte[] photo;
 	    
 	    @JsonIgnoreProperties("user")
 	    private List<CommentaireDTO> commentaires;

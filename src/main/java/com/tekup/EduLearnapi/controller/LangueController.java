@@ -1,21 +1,17 @@
 package com.tekup.EduLearnapi.controller;
 
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.tekup.EduLearnapi.Service.LangueServices;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.LangueDTO;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,32 +20,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LangueController {
 
-
     @Autowired
     private final LangueServices langueServices;
 
     @GetMapping
-    public Page<LangueDTO> getLangues(Pageable pageable)
-    {
-    	return langueServices.getAllLangues(pageable);
+    public ResponseEntity<Page<LangueDTO>> getLangues(Pageable pageable) {
+        Page<LangueDTO> langues = langueServices.getAllLangues(pageable);
+        return ResponseEntity.ok(langues);
     }
 
     @PostMapping
-    public LangueDTO addOneLangue(@RequestBody LangueDTO langue)
-    {
-    return langueServices.addOneLangue(langue);	
+    public ResponseEntity<LangueDTO> addOneLangue(@RequestBody LangueDTO langue) {
+        LangueDTO savedLangue = langueServices.addOneLangue(langue);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedLangue);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LangueDTO> getLangue(@PathVariable Long id) {
+        Optional<LangueDTO> langueOptional = langueServices.findOneLangue(id);
+        return langueOptional.map(ResponseEntity::ok)
+                             .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LangueDTO> updateLangue(@PathVariable Long id, @RequestBody LangueDTO langueDTO) {
+        Optional<LangueDTO> updatedLangue = langueServices.updateOneLangue(id, langueDTO);
+        return updatedLangue.map(ResponseEntity::ok)
+                            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOneLangue(@PathVariable long id)
-    {
-    langueServices.deleteOneLangue(id);	
+    public ResponseEntity<Void> deleteOneLangue(@PathVariable Long id) {
+        langueServices.deleteOneLangue(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/cours/{id}")
-    public LangueDTO assignToCours(@PathVariable long id,@RequestBody CoursDTO cours)
-    {
-    return langueServices.assignCoursToLangue(id, cours);	
+    public ResponseEntity<LangueDTO> assignToCours(@PathVariable Long id, @RequestBody CoursDTO cours) {
+        LangueDTO updatedLangue = langueServices.assignCoursToLangue(id, cours);
+        return ResponseEntity.ok(updatedLangue);
     }
-    
 }

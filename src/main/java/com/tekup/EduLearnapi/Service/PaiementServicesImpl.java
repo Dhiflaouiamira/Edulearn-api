@@ -52,6 +52,17 @@ public class PaiementServicesImpl implements PaiementServices{
 	}
 
 
+	@Override
+	 public Optional<PaiementDTO> updateOnePaiement(Long id, PaiementDTO paiementDTO) {
+        return paiementRepository.findById(id).map(paiement -> {
+            paiement.setMontant(paiementDTO.getMontant());
+            paiement.setDatePaiement(paiementDTO.getDatePaiement());
+            paiement.setModePaiement(paiementDTO.getModePaiement());
+            paiementRepository.save(paiement);
+
+            return new PaiementDTO();
+        });
+    }
 
 
 	}

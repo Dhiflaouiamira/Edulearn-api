@@ -44,4 +44,16 @@ public class CategorieServicesImpl implements CategorieServices {
 
 	}
 
+
+	   @Override
+	    public Optional<CategorieDTO> updateOneCategorie(Long id, CategorieDTO categorieDTO) {
+	        return categorieRepository.findById(id).map(categorie -> {
+	            // Update fields
+	            categorie.setNom(categorieDTO.getNom());
+	            categorie.setDescription(categorieDTO.getDescription());
+	            
+	            return CategorieMapper.convertToDto(categorieRepository.save(categorie));
+	        });
+	    }
+
 }

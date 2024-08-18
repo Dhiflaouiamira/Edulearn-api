@@ -44,5 +44,18 @@ public class BlogServicesImpl implements BlogServices{
 
 	}
 
+
+    @Override
+    public Optional<BlogDTO> updateOneBlog(Long id, BlogDTO blogDTO) {
+        return blogRepository.findById(id).map(blog -> {
+            blog.setTitle(blogDTO.getTitle());
+            blog.setDescription(blogDTO.getDescription());
+            blog.setCover(blogDTO.getCover());
+            blog.setCreatedAt(blogDTO.getCreatedAt());
+           
+            return BlogMapper.convertToDto(blogRepository.save(blog));
+        });
+    }
+
 }
 

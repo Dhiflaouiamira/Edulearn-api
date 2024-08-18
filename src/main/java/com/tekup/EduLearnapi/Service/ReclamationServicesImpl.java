@@ -2,6 +2,7 @@ package com.tekup.EduLearnapi.Service;
 
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,5 +46,21 @@ public class ReclamationServicesImpl implements ReclamationServices {
 		return reclamationRepository.findById(id).map(ReclamationMapper::convertToDto);
 
 	}
+
+
+	@Override
+	public Optional<ReclamationDTO> updateOneReclamation(Long id, ReclamationDTO reclamationDTO) {
+	    return reclamationRepository.findById(id).map(reclamation -> {
+	        reclamation.setSujet(reclamationDTO.getSujet());
+	        reclamation.setDescription(reclamationDTO.getDescription());
+	        reclamation.setDateCreation(reclamationDTO.getDateCreation());
+	        reclamation.setEtat(reclamationDTO.getEtat());
+	        reclamation.setTexte(reclamationDTO.getTexte());
+	        reclamationRepository.save(reclamation);
+            return new ReclamationDTO();
+
+	    });
+	}
+
 
 }

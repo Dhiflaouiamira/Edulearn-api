@@ -1,15 +1,13 @@
 package com.tekup.EduLearnapi.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.EvaluationServices;
 import com.tekup.EduLearnapi.dto.EvaluationDTO;
@@ -18,27 +16,38 @@ import com.tekup.EduLearnapi.dto.EvaluationDTO;
 @RequestMapping("/api/evaluations")
 public class EvaluationController {
 
-	 @Autowired
-	    private EvaluationServices evaluationServices;
+    @Autowired
+    private EvaluationServices evaluationServices;
 
-	 @GetMapping
-	    public Page<EvaluationDTO> getEvaluations(Pageable pageable)
-	    {
-	    	return evaluationServices.getAllEvaluations(pageable);
-	    }
+    @GetMapping
+    public ResponseEntity<Page<EvaluationDTO>> getEvaluations(Pageable pageable) {
+        Page<EvaluationDTO> evaluations = evaluationServices.getAllEvaluations(pageable);
+        return ResponseEntity.ok(evaluations);
+    }
 
-	    @PostMapping
-	    public EvaluationDTO addOneEvaluation(@RequestBody EvaluationDTO evaluation)
-	    {
-	    return evaluationServices.addOneEvaluation(evaluation);	
-	    }
+    @PostMapping
+    public ResponseEntity<EvaluationDTO> addOneEvaluation(@RequestBody EvaluationDTO evaluation) {
+        EvaluationDTO savedEvaluation = evaluationServices.addOneEvaluation(evaluation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEvaluation);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public void deleteOneEvaluation(@PathVariable long id)
-	    {
-	    evaluationServices.deleteOneEvaluation(id);	
+    @GetMapping("/{id}")
+    public ResponseEntity<EvaluationDTO> getEvaluation(@PathVariable Long id) {
+        Optional<EvaluationDTO> evaluationOptional = evaluationServices.findOneEvaluation(id);
+        return evaluationOptional.map(ResponseEntity::ok)
+                                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
-	    }
+    @PutMapping("/{id}")
+    public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable Long id, @RequestBody EvaluationDTO evaluationDTO) {
+        Optional<EvaluationDTO> updatedEvaluation = evaluationServices.updateOneEvaluation(id, evaluationDTO);
+        return updatedEvaluation.map(ResponseEntity::ok)
+                                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOneEvaluation(@PathVariable Long id) {
+        evaluationServices.deleteOneEvaluation(id);
+        return ResponseEntity.noContent().build();
+    }
 }
-

@@ -13,4 +13,5 @@ public interface EvaluationServices {
 	public EvaluationDTO addOneEvaluation(EvaluationDTO evaluation);
 	public void deleteOneEvaluation(long id);
 	public Optional<EvaluationDTO> findOneEvaluation(long id);
+	public Optional<EvaluationDTO> updateOneEvaluation(Long id, EvaluationDTO evaluationDTO);
 }

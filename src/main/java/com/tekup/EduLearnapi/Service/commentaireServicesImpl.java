@@ -44,4 +44,15 @@ public class commentaireServicesImpl implements CommentaireServices{
 		return commentaireRepository.findById(id).map(CommentaireMapper::convertToDto);
 
 	}
+
+
+	  @Override
+	    public Optional<CommentaireDTO> updateOneCommentaire(Long id, CommentaireDTO commentaireDTO) {
+	        return commentaireRepository.findById(id).map(commentaire -> {
+	            commentaire.setContenu(commentaireDTO.getContenu());
+	            commentaire.setDateCreation(commentaireDTO.getDateCreation());
+	            commentaireRepository.save(commentaire);
+	            return CommentaireMapper.convertToDto(commentaire);
+	        });
+	    }
 }

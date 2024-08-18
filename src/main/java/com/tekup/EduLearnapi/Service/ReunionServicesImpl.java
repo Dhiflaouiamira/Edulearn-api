@@ -44,5 +44,20 @@ public class ReunionServicesImpl implements ReunionServices {
 		return reunionRepository.findById(id).map(ReunionMapper::convertToDto);
 
 	}
+	
+	@Override
+	public Optional<ReunionDTO> updateOneReunion(Long id, ReunionDTO reunionDTO) {
+	    return reunionRepository.findById(id).map(reunion -> {
+	        reunion.setSujet(reunionDTO.getSujet());
+	        reunion.setDescription(reunionDTO.getDescription());
+	        reunion.setDateDebut(reunionDTO.getDateDebut());
+	        reunion.setDateFin(reunionDTO.getDateFin());
+	        reunionRepository.save(reunion);
 
+            return new ReunionDTO();
+
+             });
+	   
 }
+}
+

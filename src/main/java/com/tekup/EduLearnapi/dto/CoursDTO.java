@@ -57,8 +57,9 @@ public class CoursDTO {
     @JsonIgnoreProperties("cours")
 	private Set<CommentaireDTO> commentaires;
 
-    @JsonIgnoreProperties("Cours")
+    @JsonIgnoreProperties("cours")
     private LangueDTO langue;
+
     
     
     @JsonIgnoreProperties("cours")

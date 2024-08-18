@@ -13,6 +13,7 @@ public interface PaiementServices {
 	public PaiementDTO addOnePaiement(PaiementDTO paiement);
 	public void deleteOnePaiement(long id);
 	public Optional<PaiementDTO> findOnePaiement(long id);
+	public Optional<PaiementDTO> updateOnePaiement(Long id, PaiementDTO paiementDTO);
 
 
 }

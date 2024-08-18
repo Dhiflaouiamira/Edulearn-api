@@ -2,13 +2,13 @@ package com.tekup.EduLearnapi.Service;
 
 import java.util.List;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.LangueDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
@@ -17,8 +17,6 @@ import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Langue;
 import com.tekup.EduLearnapi.repository.CoursRepository;
 import com.tekup.EduLearnapi.repository.LangueRepository;
-
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -76,6 +74,18 @@ public class LangueServicesImpl implements LangueServices{
 	    
 	    return null;
 	}
+
+	@Override
+	public Optional<LangueDTO> updateOneLangue(Long id, LangueDTO langueDTO) {
+        return langueRepository.findById(id).map(langue -> {
+            langue.setNom(langueDTO.getNom());
+            langue.setCode(langueDTO.getCode());
+        
+            langueRepository.save(langue);
+            return new LangueDTO();
+        });
+    }
+
 
 	
 
