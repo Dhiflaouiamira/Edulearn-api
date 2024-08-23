@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,7 +19,7 @@ public class CommentaireDTO {
 	    @NotBlank
 	    private String contenu;
 
-	    @NotBlank
+	    @NotNull
 	    private Date dateCreation;
 	    
 	    @JsonIgnoreProperties("commemtaires")
@@ -27,6 +28,8 @@ public class CommentaireDTO {
 	    @JsonIgnoreProperties("commemtaires")
         private CoursDTO cours;
 	    
-	    @JsonIgnoreProperties("commemtaires")
-	    private BlogDTO blog;
+
+	    
+	    private Long userId;
+	    private Long coursId;
 }

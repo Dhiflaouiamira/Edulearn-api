@@ -14,20 +14,27 @@ import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CategorieMapper;
 import com.tekup.EduLearnapi.mappers.ChapitreMapper;
 import com.tekup.EduLearnapi.mappers.CommentaireMapper;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 import com.tekup.EduLearnapi.mappers.PaiementMapper;
+import com.tekup.EduLearnapi.mappers.ReclamationMapper;
+import com.tekup.EduLearnapi.mappers.UserMapper;
 import com.tekup.EduLearnapi.model.Categorie;
 import com.tekup.EduLearnapi.model.Chapitre;
 import com.tekup.EduLearnapi.model.Commentaire;
 import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Paiement;
+import com.tekup.EduLearnapi.model.Reclamation;
+import com.tekup.EduLearnapi.model.User;
 import com.tekup.EduLearnapi.repository.ChapitreRepository;
 import com.tekup.EduLearnapi.repository.CommentaireRepository;
 import com.tekup.EduLearnapi.repository.CoursRepository;
 import com.tekup.EduLearnapi.repository.PaiementRepository;
+import com.tekup.EduLearnapi.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +51,9 @@ public class CoursServicesImpl implements CoursServices {
 
     @Autowired
     private final PaiementRepository paiementRepository;
+    
+    @Autowired
+    private final UserRepository userRepository;
 
     @Override
     public Page<CoursDTO> getAllCours(Pageable pageable) {
@@ -57,6 +67,7 @@ public class CoursServicesImpl implements CoursServices {
         return CoursMapper.convertToDto(coursRepository.save(cours));
     }
 
+   
     @Override
     public void deleteOneCours(long id) {
         coursRepository.deleteById(id);
@@ -78,14 +89,22 @@ public class CoursServicesImpl implements CoursServices {
     }
 
     @Override
-    public CoursDTO assignCommentaireToCours(long id, CommentaireDTO commentaireDTO) {
-        return coursRepository.findById(id).map(cours -> {
-            Commentaire commentaire = CommentaireMapper.convertToEntity(commentaireDTO);
-            commentaire.setCours(cours);
-            commentaireRepository.save(commentaire);
-            return CoursMapper.convertToDto(cours);
-        }).orElse(null);
+    public CoursDTO assignCommentaireToCours(long coursId, CommentaireDTO commentaireDTO) {
+        Cours cours = coursRepository.findById(coursId)
+            .orElseThrow();
+        
+        Commentaire commentaire = CommentaireMapper.convertToEntity(commentaireDTO);
+        commentaire.setCours(cours);
+
+        User user = userRepository.findById(commentaireDTO.getUserId())
+            .orElseThrow();
+        
+        commentaire.setUser(user);
+
+        commentaireRepository.save(commentaire);
+        return CoursMapper.convertToDto(cours);
     }
+
 
     @Override
     public CoursDTO assignChapitreToCours(long id, ChapitreDTO chapitreDTO) {
@@ -130,6 +149,8 @@ public class CoursServicesImpl implements CoursServices {
             cours.setDateFin(coursDTO.getDateFin());
             cours.setPrix(coursDTO.getPrix());
             cours.setSujet(coursDTO.getSujet());
+            cours.setType(coursDTO.getType());
+            cours.setCover(coursDTO.getCover());
             cours.setCertification(coursDTO.isCertification());
 
             coursRepository.save(cours);

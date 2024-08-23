@@ -1,9 +1,6 @@
 package com.tekup.EduLearnapi.dto;
 
 import java.util.Date;
-
-
-
 import java.util.List;
 import java.util.Set;
 
@@ -22,47 +19,45 @@ import lombok.ToString;
 @ToString
 public class UserDTO {
 
-	    @NotBlank
-	    private String nom;
+    private Long id;
 
-	    @NotBlank
-	    private String prenom;
+    @NotBlank
+    private String nom;
 
-	    @Email
-	    @NotBlank
-	    private String email;
+    @NotBlank
+    private String prenom;
 
-	    @NotBlank
-	    private String password;
-	    
-	    @NotBlank
-	    private String role;
-	    
-        @Positive
-	    private Date dateDeNaissance;
-	    
-        @Positive
-	    private double telephone;
+    @Email
+    @NotBlank
+    private String email;
 
-	    @NotBlank
-	    private String cin;
-	    
-	    @NotBlank
-	    private String genre;
-	    
-	    
-	    @JsonIgnoreProperties("user")
-	    private List<CommentaireDTO> commentaires;
-	    
-	    @JsonIgnoreProperties("user")
-	    private List<BlogDTO> blogs;
-	    
-	    @JsonIgnoreProperties("user")
-	    private List<ReclamationDTO> reclamations;
-	    
-	    @JsonIgnoreProperties("user")
-	    private List<PaiementDTO> paiements;
-	    
-	    @JsonIgnoreProperties("users")
-	    private Set<CoursDTO> cours;
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String role;
+
+    @Positive
+    private Date dateDeNaissance;
+
+    @Positive
+    private double telephone;
+
+    @NotBlank
+    private String cin;
+
+    @NotBlank
+    private String genre;
+    
+    @NotBlank
+    private String image;
+
+    @JsonIgnoreProperties("user")
+    private List<CommentaireDTO> commentaires;
+
+    @JsonIgnoreProperties("user")
+    private List<ReclamationDTO> reclamations;
+
+    @JsonIgnoreProperties("user")
+    private Set<CoursDTO> cours;
 }

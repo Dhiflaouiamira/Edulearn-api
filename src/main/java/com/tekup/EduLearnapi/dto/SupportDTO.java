@@ -27,6 +27,9 @@ public class SupportDTO {
     @NotBlank
     private Date dateCreation;
     
+    // Reference to Langue by its ID
+    private Long supportId;
+ 
     @JsonIgnoreProperties("supports")
     private ChapitreDTO chapitre;
 }

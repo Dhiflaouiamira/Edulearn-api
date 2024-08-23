@@ -18,3 +18,4 @@ public class UserMapper {
 		return modelMapper.map(userDTO, User.class);
 	}
 }
+

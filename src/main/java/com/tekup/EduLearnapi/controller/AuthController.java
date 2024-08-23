@@ -16,6 +16,9 @@ import com.tekup.EduLearnapi.Service.JwtService;
 import com.tekup.EduLearnapi.Service.UserServices;
 import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.model.AuthRequest;
+import com.tekup.EduLearnapi.model.AuthResponse;
+import com.tekup.EduLearnapi.model.User;
+import com.tekup.EduLearnapi.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,14 +33,27 @@ public class AuthController {
     private JwtService jwtService;
     @Autowired
     private final UserServices userServices;
+    
+    @Autowired
+    private final UserRepository userRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
             Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+
             if (authenticate.isAuthenticated()) {
-                return ResponseEntity.ok(jwtService.generateToken(authRequest.getUserName()));
+                String token = jwtService.generateToken(authRequest.getUserName());
+
+                // Fetch user details to get the role
+                User user = userRepository.findByNom(authRequest.getUserName())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+                // Create response with token and role
+                AuthResponse authResponse = new AuthResponse(token, user.getRole());
+
+                return ResponseEntity.ok(authResponse);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
@@ -45,6 +61,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user request");
         }
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {

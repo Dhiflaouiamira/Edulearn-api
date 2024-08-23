@@ -31,7 +31,12 @@ public class Langue extends BaseEntity {
     @NotBlank
     private String code;
     
+    @Column(nullable = false)
+    @NotBlank
+    private String image;
+    
     @OneToMany(mappedBy = "langue")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Cours> cours;
+   
 }

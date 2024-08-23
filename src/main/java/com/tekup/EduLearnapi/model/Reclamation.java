@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +19,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reclamation extends BaseEntity {
-
     @Column(nullable = false)
     @NotBlank
     private String sujet;
@@ -37,7 +37,7 @@ public class Reclamation extends BaseEntity {
     @Column(nullable = false)
     @NotBlank
     private String texte;
-    
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private User user;
 }

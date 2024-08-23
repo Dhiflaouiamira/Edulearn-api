@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,11 +16,18 @@ import lombok.ToString;
 @ToString
 public class CategorieDTO {
 
+	 
+    private Long id;
+    
     @NotBlank
     private String nom;
 
     @NotBlank
     private String description;
+    
+    @Column(nullable = false)
+    @NotBlank
+    private String image;
     
     @JsonIgnoreProperties("categories")
     private Set<CoursDTO> cours;

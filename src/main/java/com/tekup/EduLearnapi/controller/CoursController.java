@@ -9,7 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.CoursServices;
+import com.tekup.EduLearnapi.dto.BlogDTO;
+import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/cours")
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CoursController {
 
@@ -27,21 +31,18 @@ public class CoursController {
     private final CoursServices coursServices;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<Page<CoursDTO>> getAllCours(Pageable pageable) {
         Page<CoursDTO> cours = coursServices.getAllCours(pageable);
         return ResponseEntity.ok(cours);
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CoursDTO> addOneCours(@RequestBody CoursDTO coursDTO) {
         CoursDTO savedCours = coursServices.addOneCours(coursDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCours);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<CoursDTO> getCours(@PathVariable Long id) {
         Optional<CoursDTO> coursOptional = coursServices.findOneCours(id);
         return coursOptional.map(ResponseEntity::ok)
@@ -57,7 +58,6 @@ public class CoursController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteOneCours(@PathVariable Long id) {
         coursServices.deleteOneCours(id);
         return ResponseEntity.noContent().build();
@@ -82,5 +82,15 @@ public class CoursController {
                 .map(CoursMapper::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(courses);
+    }
+    
+    @PostMapping("/chapitre/{id}")
+    public CoursDTO assignToChapitre(@PathVariable long id, @RequestBody ChapitreDTO chapitre) {
+        return coursServices.assignChapitreToCours(id, chapitre);	
+    } 
+    
+    @PostMapping("/commentaire/{id}")
+    public CoursDTO assignToCommentaire(@PathVariable long id,@RequestBody CommentaireDTO commentaire) {
+        return coursServices.assignCommentaireToCours(id, commentaire);	
     }
 }

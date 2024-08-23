@@ -11,10 +11,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.LangueDTO;
+import com.tekup.EduLearnapi.dto.ReclamationDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 import com.tekup.EduLearnapi.mappers.LangueMapper;
+import com.tekup.EduLearnapi.mappers.ReclamationMapper;
+import com.tekup.EduLearnapi.mappers.UserMapper;
 import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Langue;
+import com.tekup.EduLearnapi.model.Reclamation;
+import com.tekup.EduLearnapi.model.User;
 import com.tekup.EduLearnapi.repository.CoursRepository;
 import com.tekup.EduLearnapi.repository.LangueRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +80,9 @@ public class LangueServicesImpl implements LangueServices{
 	    
 	    return null;
 	}
+	
+
+
 
 	@Override
 	public Optional<LangueDTO> updateOneLangue(Long id, LangueDTO langueDTO) {

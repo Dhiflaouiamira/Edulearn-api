@@ -19,7 +19,6 @@ public class BlogController {
 
     // Get all blogs with pagination
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<Page<BlogDTO>> getBlogs(Pageable pageable) {
         Page<BlogDTO> blogs = blogServices.getAllBlogs(pageable);
         return ResponseEntity.ok(blogs);
@@ -27,7 +26,6 @@ public class BlogController {
 
     // Get a blog by ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<BlogDTO> getBlogById(@PathVariable long id) {
         return blogServices.findOneBlog(id)
                 .map(blog -> ResponseEntity.ok(blog))
@@ -36,14 +34,12 @@ public class BlogController {
 
     // Add a new blog
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<BlogDTO> addOneBlog(@RequestBody BlogDTO blogDTO) {
         BlogDTO createdBlog = blogServices.addOneBlog(blogDTO);
         return ResponseEntity.status(201).body(createdBlog);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<BlogDTO> updateOneBlog(@PathVariable long id, @RequestBody BlogDTO blogDTO) {
         return blogServices.updateOneBlog(id, blogDTO)
                 .map(updatedBlog -> ResponseEntity.ok(updatedBlog))
@@ -51,7 +47,6 @@ public class BlogController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteOneBlog(@PathVariable long id) {
         blogServices.deleteOneBlog(id);
         return ResponseEntity.noContent().build();

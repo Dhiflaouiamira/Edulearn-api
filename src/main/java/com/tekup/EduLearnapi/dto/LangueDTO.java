@@ -17,12 +17,17 @@ import lombok.ToString;
 @Setter
 @ToString
 public class LangueDTO {
+        
+        private Long id;
 
 	    @NotBlank
 	    private String nom;
 
 	    @NotBlank	    
 	    private String code;
+	    
+	    @NotBlank	    
+	    private String image;
 	    
 	    @JsonIgnoreProperties("langue")
 	    private List<CoursDTO> cours;

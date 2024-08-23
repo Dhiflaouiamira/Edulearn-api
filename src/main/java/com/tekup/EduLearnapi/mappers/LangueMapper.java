@@ -3,7 +3,9 @@ package com.tekup.EduLearnapi.mappers;
 import org.modelmapper.ModelMapper;
 
 import com.tekup.EduLearnapi.dto.LangueDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.model.Langue;
+import com.tekup.EduLearnapi.model.User;
 
 public class LangueMapper {
 
@@ -18,3 +20,4 @@ public class LangueMapper {
 		return modelMapper.map(langueDTO, Langue.class);
 	}
 }
+

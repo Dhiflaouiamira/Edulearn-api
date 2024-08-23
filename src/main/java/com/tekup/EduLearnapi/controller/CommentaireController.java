@@ -18,28 +18,24 @@ public class CommentaireController {
     private CommentaireServices commentaireServices;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR') or hasAuthority('ETUDIANT')")
     public ResponseEntity<Page<CommentaireDTO>> getCommentaires(Pageable pageable) {
         Page<CommentaireDTO> commentaires = commentaireServices.getAllCommentaires(pageable);
         return ResponseEntity.ok(commentaires);
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<CommentaireDTO> addOneCommentaire(@RequestBody CommentaireDTO commentaireDTO) {
         CommentaireDTO addedCommentaire = commentaireServices.addOneCommentaire(commentaireDTO);
         return ResponseEntity.ok(addedCommentaire);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteOneCommentaire(@PathVariable long id) {
         commentaireServices.deleteOneCommentaire(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR') or hasAuthority('ETUDIANT')")
     public ResponseEntity<CommentaireDTO> findOneCommentaire(@PathVariable long id) {
         return commentaireServices.findOneCommentaire(id)
                 .map(ResponseEntity::ok)
@@ -47,7 +43,6 @@ public class CommentaireController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<CommentaireDTO> updateCommentaire(@PathVariable long id, @RequestBody CommentaireDTO commentaireDTO) {
         return commentaireServices.updateOneCommentaire(id, commentaireDTO)
                 .map(ResponseEntity::ok)

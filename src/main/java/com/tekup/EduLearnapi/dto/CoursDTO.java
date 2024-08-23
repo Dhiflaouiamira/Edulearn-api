@@ -1,14 +1,15 @@
 package com.tekup.EduLearnapi.dto;
 
 import java.util.Date;
-
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +18,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CoursDTO {
+
+	
+	
+    private Long id;
 
     @NotBlank
     private String titre;
@@ -30,14 +35,20 @@ public class CoursDTO {
     @Positive
     private int duree;
 
-    @NotBlank
+    @NotNull
+    private String cover;
+    
+    @NotNull
     private Date dateDebut;
 
-    @NotBlank
+    @NotNull
     private Date dateFin;
 
     @Positive  
     private double prix;
+    
+    @Positive  
+    private String type;
 
     @NotBlank
     private String sujet;
@@ -45,23 +56,22 @@ public class CoursDTO {
     @NotBlank
     private boolean certification;
     
+    // Use IDs or minimal representation to avoid circular references
     @JsonIgnoreProperties("cours")
-	private Set<UserDTO> users;
+    private Set<UserDTO> users;
     
     @JsonIgnoreProperties("cours")
-	private Set<CategorieDTO> categories;
+    private Set<CategorieDTO> categories;
     
     @JsonIgnoreProperties("cours")
-	private Set<ChapitreDTO> chapitres;
+    private Set<ChapitreDTO> chapitres;
     
     @JsonIgnoreProperties("cours")
-	private Set<CommentaireDTO> commentaires;
+    private Set<CommentaireDTO> commentaires;
 
-    @JsonIgnoreProperties("cours")
-    private LangueDTO langue;
+    // Reference to Langue by its ID
+    private Long langueId;
 
-    
-    
     @JsonIgnoreProperties("cours")
     private PaiementDTO paiements;
 }

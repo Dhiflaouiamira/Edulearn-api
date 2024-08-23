@@ -16,6 +16,9 @@ import lombok.ToString;
 @ToString
 public class ChapitreDTO {
 
+	
+    private Long id;
+
 	    @NotBlank
 	    private String titre;
 

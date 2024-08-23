@@ -23,21 +23,18 @@ public class ReclamationController {
     private final ReclamationServices reclamationServices;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Page<ReclamationDTO>> getAllReclamations(Pageable pageable) {
         Page<ReclamationDTO> reclamations = reclamationServices.getAllReclamations(pageable);
         return ResponseEntity.ok(reclamations);
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ReclamationDTO> addOneReclamation(@RequestBody ReclamationDTO reclamationDTO) {
         ReclamationDTO savedReclamation = reclamationServices.addOneReclamation(reclamationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReclamation);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<ReclamationDTO> getReclamation(@PathVariable Long id) {
         Optional<ReclamationDTO> reclamationOptional = reclamationServices.findOneReclamation(id);
         return reclamationOptional.map(ResponseEntity::ok)
@@ -45,7 +42,6 @@ public class ReclamationController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ReclamationDTO> updateReclamation(@PathVariable Long id, @RequestBody ReclamationDTO reclamationDTO) {
         Optional<ReclamationDTO> updatedReclamation = reclamationServices.updateOneReclamation(id, reclamationDTO);
         return updatedReclamation.map(ResponseEntity::ok)
@@ -53,7 +49,6 @@ public class ReclamationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteOneReclamation(@PathVariable long id) {
         reclamationServices.deleteOneReclamation(id);
     }

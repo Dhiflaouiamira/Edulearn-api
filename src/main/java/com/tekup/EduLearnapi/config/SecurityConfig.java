@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +38,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-        	    .requestMatchers("/api/auth/register", "/api/auth/login", "/auth/welcome", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/api/blogs")
+        	    .requestMatchers("/api/auth/register", "/api/auth/login", "/auth/welcome", "/swagger-ui/index.html", 
+        	    		"/swagger-ui/**", "/v3/api-docs/**","/api/**"
+        	    				)
         	    .permitAll()
         	    .anyRequest().authenticated())
 

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.tekup.EduLearnapi.Service.UserServices;
+import com.tekup.EduLearnapi.dto.BlogDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
@@ -31,7 +32,6 @@ public class UserController {
     private final UserServices userServices;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
         Page<UserDTO> users = userServices.getAllUsers(pageable);
         return ResponseEntity.ok(users);
@@ -41,14 +41,12 @@ public class UserController {
     
  
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
         UserDTO savedUser = userServices.addOneUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         Optional<UserDTO> userOptional = userServices.findOneUser(id);
         return userOptional.map(ResponseEntity::ok)
@@ -64,20 +62,24 @@ public class UserController {
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteOneUser(@PathVariable long id) {
         userServices.deleteOneUser(id);	
     }
    
-    @PostMapping("/commentaire/{id}")
-    public UserDTO assignToCommentaire(@PathVariable long id,@RequestBody CommentaireDTO commentaire) {
-        return userServices.assignCommentaireToUser(id, commentaire);	
-    }
+   
     
     @PostMapping("/reclamation/{id}")
     public UserDTO assignToReclamation(@PathVariable long id,@RequestBody ReclamationDTO reclamation) {
         return userServices.assignReclamationToUser(id, reclamation);	
     }
+    @GetMapping("/role/{role}")
+    public ResponseEntity<Page<UserDTO>> getUsersByRole(
+            @PathVariable("role") String role,
+            Pageable pageable) {
+        Page<UserDTO> users = userServices.getUsersByRole(role, pageable);
+        return ResponseEntity.ok(users);
+    }
+
     
     @PostMapping("/paiement/{id}")
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -85,8 +87,13 @@ public class UserController {
         return userServices.assignPaiementToUser(id, paiement);	
     }
     
-    @PostMapping("/Cours/{id}")
+    @PostMapping("/cours/{id}")
     public UserDTO assignToCours(@PathVariable long id, @RequestBody CoursDTO cours) {
         return userServices.assignCoursToUser(id, cours);	
     }
+    @PostMapping("/blog/{id}")
+    public UserDTO assignToBlog(@PathVariable long id, @RequestBody BlogDTO blog) {
+        return userServices.assignBlogToUser(id, blog);	
+    }
+    
 }

@@ -7,16 +7,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.tekup.EduLearnapi.dto.SupportDTO;
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.dto.SupportDTO;
+import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.mappers.SupportMapper;
 import com.tekup.EduLearnapi.mappers.ChapitreMapper;
+import com.tekup.EduLearnapi.mappers.ChapitreMapper;
+import com.tekup.EduLearnapi.mappers.SupportMapper;
+import com.tekup.EduLearnapi.mappers.ChapitreMapper;
+import com.tekup.EduLearnapi.model.Support;
+import com.tekup.EduLearnapi.model.Chapitre;
+import com.tekup.EduLearnapi.model.Support;
 import com.tekup.EduLearnapi.model.Chapitre;
 import com.tekup.EduLearnapi.repository.ChapitreRepository;
+import com.tekup.EduLearnapi.repository.SupportRepository;
 
 @Service
 public class ChapitreServicesImpl implements ChapitreServices {
 
 	@Autowired
 	ChapitreRepository chapitreRepository;
+	
+
+	@Autowired
+	SupportRepository supportRepository;
 
 	@Override
 	public Page<ChapitreDTO> getAllChapitres(Pageable pageable) {
@@ -53,5 +69,23 @@ public class ChapitreServicesImpl implements ChapitreServices {
 	            chapitre.setOrdre(chapitreDTO.getOrdre());
 	            return ChapitreMapper.convertToDto(chapitreRepository.save(chapitre));
 	        });
+	    }
+	  
+
+	    
+		@Override
+
+	    public ChapitreDTO assignSupportToChapitre(long chapitreId, SupportDTO supportDTO) {
+	        Optional<Chapitre> chapitreOptional = chapitreRepository.findById(chapitreId);
+	        if (chapitreOptional.isPresent()) {
+	            Chapitre chapitre = chapitreOptional.get();
+	            Support support = SupportMapper.convertToEntity(supportDTO);
+	            support.setChapitre(chapitre);
+	            supportRepository.save(support);
+	            return ChapitreMapper.convertToDto(chapitre);
+	        } else {
+	            // Handle chapitre not found scenario
+	            return null;
+	        }
 	    }
 }

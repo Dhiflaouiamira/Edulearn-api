@@ -9,6 +9,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import com.tekup.EduLearnapi.dto.BlogDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
@@ -23,8 +25,11 @@ public interface UserServices {
 	public Optional<UserDTO> findOneUser(long id);
 	public UserDTO assignCommentaireToUser(long id,CommentaireDTO commentaire);
 	public UserDTO assignReclamationToUser(long id,ReclamationDTO reclamation);
+	public UserDTO assignBlogToUser(long id,BlogDTO blog);
 	public UserDTO assignPaiementToUser(long id,PaiementDTO paiement);
 	public UserDTO assignCoursToUser(long id,CoursDTO cours);
 	public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO);
+    Page<UserDTO> getUsersByRole(String role, Pageable pageable);
+
 
 }

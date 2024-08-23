@@ -10,7 +10,7 @@ import com.tekup.EduLearnapi.dto.ReclamationDTO;
 public interface ReclamationServices {
 
 	public Page<ReclamationDTO> getAllReclamations(Pageable pageable) ;
-	public ReclamationDTO addOneReclamation(ReclamationDTO reclamation);
+	public ReclamationDTO addOneReclamation(ReclamationDTO reclamationDTO);
 	public void deleteOneReclamation(long id);
 	public Optional<ReclamationDTO> findOneReclamation(long id);
 	public Optional<ReclamationDTO> updateOneReclamation(Long id, ReclamationDTO reclamationDTO);

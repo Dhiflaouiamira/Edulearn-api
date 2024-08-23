@@ -30,6 +30,10 @@ public class Categorie extends BaseEntity {
     @NotBlank
     private String description;
     
+    @Column(nullable = false)
+    @NotBlank
+    private String image;
+    
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
     private Set<Cours> cours;
     

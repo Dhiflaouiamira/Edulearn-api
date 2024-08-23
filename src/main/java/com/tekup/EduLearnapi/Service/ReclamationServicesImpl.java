@@ -28,11 +28,12 @@ public class ReclamationServicesImpl implements ReclamationServices {
 	}
 
 
-	@Override
-	public ReclamationDTO addOneReclamation(ReclamationDTO reclamation) {
-		return ReclamationMapper.convertToDto(reclamationRepository.save(ReclamationMapper.convertToEntity(reclamation)));
-
-	}
+	
+    @Override
+    public ReclamationDTO addOneReclamation(ReclamationDTO reclamationDTO) {
+    	Reclamation reclamation = ReclamationMapper.convertToEntity(reclamationDTO);
+        return ReclamationMapper.convertToDto(reclamationRepository.save(reclamation));
+    }
 
 	@Override
 	public void deleteOneReclamation(long id) {

@@ -69,6 +69,10 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     @NotBlank
     private String cin;
+    
+    @Column(nullable = false)
+    @NotBlank
+    private String image;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<Cours> cours;
@@ -80,7 +84,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Reclamation> reclamations;
-
+      
+    
+ 
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Paiement> paiements;
