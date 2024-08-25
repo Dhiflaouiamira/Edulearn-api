@@ -84,6 +84,11 @@ public class CoursServicesImpl implements CoursServices {
     }
 
     @Override
+    public List<Cours> findCoursesByLangue(String langueName) {
+        return coursRepository.findByLangueNom(langueName);
+    }
+
+    @Override
     public List<Cours> findCoursesBydesc(String description) {
         return coursRepository.findByDescription(description);
     }

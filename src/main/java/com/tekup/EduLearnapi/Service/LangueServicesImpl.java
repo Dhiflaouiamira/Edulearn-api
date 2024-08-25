@@ -89,7 +89,8 @@ public class LangueServicesImpl implements LangueServices{
         return langueRepository.findById(id).map(langue -> {
             langue.setNom(langueDTO.getNom());
             langue.setCode(langueDTO.getCode());
-        
+            langue.setImage(langueDTO.getImage());
+
             langueRepository.save(langue);
             return new LangueDTO();
         });

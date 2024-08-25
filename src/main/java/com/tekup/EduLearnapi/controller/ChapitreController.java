@@ -1,8 +1,11 @@
 package com.tekup.EduLearnapi.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,4 +53,11 @@ public class ChapitreController {
     public ChapitreDTO assignToSupport(@PathVariable long id, @RequestBody SupportDTO support) {
         return chapitreServices.assignSupportToChapitre(id, support);	
     }
+
+    @GetMapping("/cours/titre/{titre}")
+    public List<ChapitreDTO> getChapitresByCoursTitre(@PathVariable("titre") String titre) {
+        return chapitreServices.findChapitresByCoursTitre(titre);
+    }
+    
+    
 }

@@ -30,6 +30,7 @@ public interface CoursServices {
 	public CoursDTO assignPaiementToCours(long id,PaiementDTO paiementDTO);
 	public CoursDTO assignCategorieToCours(long id,CategorieDTO categorie);
 	
+	public List<Cours> findCoursesByLangue(String langue);
 
 	public List<Cours> findCoursesByTitre(String titre);
 	public List<Cours> findCoursesBydesc(String description);

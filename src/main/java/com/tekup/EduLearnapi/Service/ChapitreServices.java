@@ -1,5 +1,6 @@
 package com.tekup.EduLearnapi.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,5 +17,6 @@ public interface ChapitreServices {
 	public Optional<ChapitreDTO> findOneChapitre(long id);
     public Optional<ChapitreDTO> updateOneChapitre(Long id, ChapitreDTO chapitreDTO) ;
 	public ChapitreDTO assignSupportToChapitre(long id,SupportDTO support);
+	public List<ChapitreDTO> findChapitresByCoursTitre(String titre);
 
 }

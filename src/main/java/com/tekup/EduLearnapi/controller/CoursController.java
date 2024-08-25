@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -9,11 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.CoursServices;
-import com.tekup.EduLearnapi.dto.BlogDTO;
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
-import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +49,6 @@ public class CoursController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CoursDTO> updateCours(@PathVariable Long id, @RequestBody CoursDTO coursDTO) {
         Optional<CoursDTO> updatedCours = coursServices.updateOneCours(id, coursDTO);
         return updatedCours.map(ResponseEntity::ok)
@@ -64,8 +62,7 @@ public class CoursController {
     }
 
 
-    @GetMapping("/byTitre")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
+    @GetMapping("/searchByTitle")
     public ResponseEntity<List<CoursDTO>> findCoursesByTitre(@RequestParam String titre) {
         List<CoursDTO> courses = coursServices.findCoursesByTitre(titre)
                 .stream()
@@ -74,6 +71,7 @@ public class CoursController {
         return ResponseEntity.ok(courses);
     }
 
+    
     @GetMapping("/byDescription")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<List<CoursDTO>> findCoursesByDescription(@RequestParam String description) {
@@ -82,6 +80,21 @@ public class CoursController {
                 .map(CoursMapper::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(courses);
+    }
+    
+    @GetMapping("/searchByLangue")
+    public ResponseEntity<List<CoursDTO>> findCoursesByLangue(@RequestParam String langue) {
+        List<CoursDTO> courses = coursServices.findCoursesByLangue(langue)
+                .stream()
+                .map(CoursMapper::convertToDto) // Ensure this method exists and works correctly
+                .collect(Collectors.toList());
+        
+        // Return the list of courses
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Return 204 No Content if no courses are found
+        }
+
+        return ResponseEntity.ok(courses); // Return 200 OK with the list of courses
     }
     
     @PostMapping("/chapitre/{id}")
@@ -93,4 +106,6 @@ public class CoursController {
     public CoursDTO assignToCommentaire(@PathVariable long id,@RequestBody CommentaireDTO commentaire) {
         return coursServices.assignCommentaireToCours(id, commentaire);	
     }
+    
+    
 }
