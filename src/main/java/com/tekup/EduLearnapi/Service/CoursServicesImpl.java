@@ -154,7 +154,6 @@ public class CoursServicesImpl implements CoursServices {
             cours.setDateFin(coursDTO.getDateFin());
             cours.setPrix(coursDTO.getPrix());
             cours.setSujet(coursDTO.getSujet());
-            cours.setType(coursDTO.getType());
             cours.setCover(coursDTO.getCover());
             cours.setCertification(coursDTO.isCertification());
 

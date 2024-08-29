@@ -9,6 +9,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
@@ -30,9 +31,10 @@ public class Categorie extends BaseEntity {
     @NotBlank
     private String description;
     
+    @Lob
     @Column(nullable = false)
     @NotBlank
-    private String image;
+    private  byte[]  image;
     
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
     private Set<Cours> cours;

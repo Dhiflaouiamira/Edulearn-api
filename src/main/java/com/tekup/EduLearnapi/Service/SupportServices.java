@@ -1,11 +1,14 @@
 package com.tekup.EduLearnapi.Service;
 
+import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.tekup.EduLearnapi.dto.SupportDTO;
+import com.tekup.EduLearnapi.model.Support;
 
 public interface SupportServices {
 
@@ -14,4 +17,6 @@ public interface SupportServices {
 	public void deleteOneSupport(long id);
 	public Optional<SupportDTO> findOneSupport(long id);
 	public Optional<SupportDTO> updateOneSupport(Long id, SupportDTO supportDTO);
+	public List<Support> findSupportByChapitre(String chapitre);
+
 }

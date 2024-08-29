@@ -2,9 +2,9 @@ package com.tekup.EduLearnapi.dto;
 
 import java.sql.Date;
 
+
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;

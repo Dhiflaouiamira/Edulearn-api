@@ -1,13 +1,15 @@
 package com.tekup.EduLearnapi.Service;
 
-
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tekup.EduLearnapi.dto.BlogDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
@@ -34,27 +36,37 @@ import com.tekup.EduLearnapi.repository.ReclamationRepository;
 import com.tekup.EduLearnapi.repository.UserRepository;
 import com.tekup.EduLearnapi.repository.PaiementRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserServicesImpl implements UserServices {
 
     @Autowired
     private final UserRepository userRepository;
+
     @Autowired
     private final CommentaireRepository commentaireRepository;
+
     @Autowired
     private final ReclamationRepository reclamationRepository;
+
     @Autowired
-    private final PaiementRepository   paiementRepository;
+    private final PaiementRepository paiementRepository;
+
     @Autowired
     private final BlogRepository blogRepository;
-    
+
     @Autowired
-    private final  CoursRepository coursRepository ;
+    private final CoursRepository coursRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private final UserMapper userMapper;
 
     @Override
     public Page<UserDTO> getAllUsers(Pageable pageable) {
@@ -66,7 +78,8 @@ public class UserServicesImpl implements UserServices {
     public UserDTO addOneUser(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User user = UserMapper.convertToEntity(userDTO);
-        return UserMapper.convertToDto(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        return UserMapper.convertToDto(savedUser);
     }
 
     @Override
@@ -82,21 +95,19 @@ public class UserServicesImpl implements UserServices {
     @Override
     public UserDTO assignCommentaireToUser(long userId, CommentaireDTO commentaireDTO) {
         User user = userRepository.findById(userId)
-            .orElseThrow();
-        
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
         Commentaire commentaire = CommentaireMapper.convertToEntity(commentaireDTO);
         commentaire.setUser(user);
 
         Cours cours = coursRepository.findById(commentaireDTO.getCoursId())
-            .orElseThrow();
-        
+            .orElseThrow(() -> new EntityNotFoundException("Course not found"));
+
         commentaire.setCours(cours);
 
         commentaireRepository.save(commentaire);
         return UserMapper.convertToDto(user);
     }
-
-
 
     @Override
     public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO) {
@@ -116,22 +127,17 @@ public class UserServicesImpl implements UserServices {
         });
     }
 
-    
     @Override
     public UserDTO assignPaiementToUser(long userId, PaiementDTO paiementDTO) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Paiement paiement = PaiementMapper.convertToEntity(paiementDTO);
-            paiement.setUser(user);
-            paiementRepository.save(paiement);
-            return UserMapper.convertToDto(user);
-        } else {
-            // Handle user not found scenario
-            return null;
-        }
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Paiement paiement = PaiementMapper.convertToEntity(paiementDTO);
+        paiement.setUser(user);
+        paiementRepository.save(paiement);
+        return UserMapper.convertToDto(user);
     }
-    
+
     @Override
     public Page<UserDTO> getUsersByRole(String role, Pageable pageable) {
         Page<User> usersByRole = userRepository.findByRole(role, pageable);
@@ -140,38 +146,52 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public UserDTO assignReclamationToUser(long userId, ReclamationDTO reclamationDTO) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Reclamation reclamation = ReclamationMapper.convertToEntity(reclamationDTO);
-            reclamation.setUser(user);
-            reclamationRepository.save(reclamation);
-            return UserMapper.convertToDto(user);
-        } else {
-            // Handle user not found scenario
-            return null;
-        }
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Reclamation reclamation = ReclamationMapper.convertToEntity(reclamationDTO);
+        reclamation.setUser(user);
+        reclamationRepository.save(reclamation);
+        return UserMapper.convertToDto(user);
     }
 
-
-	@Override
-
+    @Override
     public UserDTO assignBlogToUser(long userId, BlogDTO blogDTO) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Blog blog = BlogMapper.convertToEntity(blogDTO);
-            blog.setUser(user);
-            blogRepository.save(blog);
-            return UserMapper.convertToDto(user);
-        } else {
-            // Handle user not found scenario
-            return null;
-        }
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Blog blog = BlogMapper.convertToEntity(blogDTO);
+        blog.setUser(user);
+        blogRepository.save(blog);
+        return UserMapper.convertToDto(user);
     }
-	@Override
-	public UserDTO assignCoursToUser(long id, CoursDTO cours) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
+
+
+    @Override
+    public UserDTO assignCoursToUser(Long userId, Long coursId) {
+        // Fetch the User entity
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Fetch the Cours entity using the Cours ID
+        Cours cours = coursRepository.findById(coursId)
+            .orElseThrow(() -> new EntityNotFoundException("Course not found"));
+
+        // Initialize the assignedCours set if it is null
+        Set<Cours> coursSet = user.getAssignedCours();
+        if (coursSet == null) {
+            coursSet = new HashSet<>();
+        }
+
+        // Add the Cours to the User's assignedCours set
+        coursSet.add(cours);
+        user.setAssignedCours(coursSet);
+
+        // Save the updated User entity
+        User updatedUser = userRepository.save(user);
+
+        // Convert the updated User entity to UserDTO and return
+        return UserMapper.convertToDto(updatedUser);
+    }
+   }
+

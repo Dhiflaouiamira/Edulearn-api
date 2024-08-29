@@ -1,14 +1,17 @@
 package com.tekup.EduLearnapi.Service;
 
+import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.tekup.EduLearnapi.dto.SupportDTO;
 import com.tekup.EduLearnapi.mappers.SupportMapper;
+import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Support;
 import com.tekup.EduLearnapi.repository.SupportRepository;
 
@@ -61,4 +64,10 @@ public class SupportServicesImpl implements SupportServices {
              });
 	   
 }
+	@Override
+	public List<Support> findSupportByChapitre(String titre)
+	{
+	        return supportRepository.findByChapitreTitre(titre);
+	    }
+
 }

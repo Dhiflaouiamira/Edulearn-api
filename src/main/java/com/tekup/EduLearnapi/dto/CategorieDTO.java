@@ -2,11 +2,12 @@ package com.tekup.EduLearnapi.dto;
 
 import java.util.Set;
 
+
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,9 +26,9 @@ public class CategorieDTO {
     @NotBlank
     private String description;
     
-    @Column(nullable = false)
+    @Lob
     @NotBlank
-    private String image;
+    private byte[] image;
     
     @JsonIgnoreProperties("categories")
     private Set<CoursDTO> cours;

@@ -1,45 +1,36 @@
 package com.tekup.EduLearnapi.controller;
 
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import com.tekup.EduLearnapi.Service.UserServices;
 import com.tekup.EduLearnapi.dto.BlogDTO;
-import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
 import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
+import com.tekup.EduLearnapi.model.User;
 
-
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
     private final UserServices userServices;
 
     @GetMapping
     public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
         Page<UserDTO> users = userServices.getAllUsers(pageable);
         return ResponseEntity.ok(users);
-        
-       
     }
-    
- 
+
     @PostMapping
     public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
         UserDTO savedUser = userServices.addOneUser(userDTO);
@@ -48,52 +39,72 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-        Optional<UserDTO> userOptional = userServices.findOneUser(id);
-        return userOptional.map(ResponseEntity::ok)
-                           .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        return userServices.findOneUser(id)
+                           .map(ResponseEntity::ok)
+                           .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-    
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        Optional<UserDTO> updatedUser = userServices.updateOneUser(id, userDTO);
-        return updatedUser.map(ResponseEntity::ok)
-                          .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        return userServices.updateOneUser(id, userDTO)
+                           .map(ResponseEntity::ok)
+                           .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-    
+
     @DeleteMapping("/{id}")
-    public void deleteOneUser(@PathVariable long id) {
-        userServices.deleteOneUser(id);	
+    public ResponseEntity<Void> deleteOneUser(@PathVariable long id) {
+        userServices.deleteOneUser(id);
+        return ResponseEntity.noContent().build();
     }
-   
-   
-    
-    @PostMapping("/reclamation/{id}")
-    public UserDTO assignToReclamation(@PathVariable long id,@RequestBody ReclamationDTO reclamation) {
-        return userServices.assignReclamationToUser(id, reclamation);	
+
+    @PostMapping("/{userId}/reclamation")
+    public ResponseEntity<UserDTO> assignToReclamation(@PathVariable long userId, @RequestBody ReclamationDTO reclamationDTO) {
+        try {
+            UserDTO userDTO = userServices.assignReclamationToUser(userId, reclamationDTO);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
+
     @GetMapping("/role/{role}")
-    public ResponseEntity<Page<UserDTO>> getUsersByRole(
-            @PathVariable("role") String role,
-            Pageable pageable) {
+    public ResponseEntity<Page<UserDTO>> getUsersByRole(@PathVariable String role, Pageable pageable) {
         Page<UserDTO> users = userServices.getUsersByRole(role, pageable);
         return ResponseEntity.ok(users);
     }
 
-    
-    @PostMapping("/paiement/{id}")
+    @PostMapping("/{userId}/paiement")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public UserDTO assignToPaiement(@PathVariable long id,@RequestBody PaiementDTO paiement) {
-        return userServices.assignPaiementToUser(id, paiement);	
+    public ResponseEntity<UserDTO> assignToPaiement(@PathVariable long userId, @RequestBody PaiementDTO paiementDTO) {
+        try {
+            UserDTO userDTO = userServices.assignPaiementToUser(userId, paiementDTO);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
-    
-    @PostMapping("/cours/{id}")
-    public UserDTO assignToCours(@PathVariable long id, @RequestBody CoursDTO cours) {
-        return userServices.assignCoursToUser(id, cours);	
+
+    @PutMapping("/{userId}/cours/{coursId}")
+    public ResponseEntity<UserDTO> assignCoursToUser(
+            @PathVariable Long userId,
+            @PathVariable Long coursId
+    ) {
+        try {
+            UserDTO userDTO = userServices.assignCoursToUser(userId, coursId);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
-    @PostMapping("/blog/{id}")
-    public UserDTO assignToBlog(@PathVariable long id, @RequestBody BlogDTO blog) {
-        return userServices.assignBlogToUser(id, blog);	
+
+    @PostMapping("/{userId}/blog")
+    public ResponseEntity<UserDTO> assignToBlog(@PathVariable long userId, @RequestBody BlogDTO blogDTO) {
+        try {
+            UserDTO userDTO = userServices.assignBlogToUser(userId, blogDTO);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
-    
 }

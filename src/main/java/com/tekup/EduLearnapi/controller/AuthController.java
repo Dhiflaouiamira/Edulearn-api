@@ -1,5 +1,7 @@
 package com.tekup.EduLearnapi.controller;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tekup.EduLearnapi.Service.JwtService;
 import com.tekup.EduLearnapi.Service.UserServices;
@@ -20,6 +25,9 @@ import com.tekup.EduLearnapi.model.AuthResponse;
 import com.tekup.EduLearnapi.model.User;
 import com.tekup.EduLearnapi.repository.UserRepository;
 
+import io.jsonwebtoken.io.IOException;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -77,5 +85,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed: " + e.getMessage());
         }
     }
+
+
 
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -48,7 +49,7 @@ public class UserDTO {
 
     @NotBlank
     private String genre;
-    
+    @Lob
     @NotBlank
     private String image;
 

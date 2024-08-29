@@ -50,8 +50,7 @@ public class Cours extends BaseEntity {
     @Column(nullable = false)
     private double prix;
 
-    @Column(nullable = false)
-    private String type;
+ 
 
     @Column(nullable = false)
     private String cover;

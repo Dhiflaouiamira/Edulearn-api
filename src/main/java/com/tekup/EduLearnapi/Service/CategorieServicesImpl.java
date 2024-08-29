@@ -14,46 +14,39 @@ import com.tekup.EduLearnapi.repository.CategorieRepository;
 @Service
 public class CategorieServicesImpl implements CategorieServices {
 
-	@Autowired
-	CategorieRepository categorieRepository;
+    @Autowired
+    CategorieRepository categorieRepository;
 
-	@Override
-	public Page<CategorieDTO> getAllCategories(Pageable pageable) {
-		Page<Categorie> categories=categorieRepository.findAll(pageable);
-		return categories.map(CategorieMapper::convertToDto);
-		
-	}
+    @Override
+    public Page<CategorieDTO> getAllCategories(Pageable pageable) {
+        Page<Categorie> categories = categorieRepository.findAll(pageable);
+        return categories.map(CategorieMapper::convertToDto);
+    }
 
+    @Override
+    public CategorieDTO addOneCategorie(CategorieDTO categorieDTO, byte[] image) {
+        Categorie categorie = CategorieMapper.convertToEntity(categorieDTO);
+        categorie.setImage(image);  // Set the image bytes
+        return CategorieMapper.convertToDto(categorieRepository.save(categorie));
+    }
 
-	@Override
-	public CategorieDTO addOneCategorie(CategorieDTO categorie) {
-		return CategorieMapper.convertToDto(categorieRepository.save(CategorieMapper.convertToEntity(categorie)));
+    @Override
+    public void deleteOneCategorie(long id) {
+        categorieRepository.deleteById(id);
+    }
 
-	}
+    @Override
+    public Optional<CategorieDTO> findOneCategorie(long id) {
+        return categorieRepository.findById(id).map(CategorieMapper::convertToDto);
+    }
 
-	@Override
-	public void deleteOneCategorie(long id) {
-		categorieRepository.deleteById(id);		
-	}
-
-
-
-	@Override
-	public Optional<CategorieDTO> findOneCategorie(long id) {
-		return categorieRepository.findById(id).map(CategorieMapper::convertToDto);
-
-	}
-
-
-	   @Override
-	    public Optional<CategorieDTO> updateOneCategorie(Long id, CategorieDTO categorieDTO) {
-	        return categorieRepository.findById(id).map(categorie -> {
-	            // Update fields
-	            categorie.setNom(categorieDTO.getNom());
-	            categorie.setDescription(categorieDTO.getDescription());
-	            
-	            return CategorieMapper.convertToDto(categorieRepository.save(categorie));
-	        });
-	    }
-
+    @Override
+    public Optional<CategorieDTO> updateOneCategorie(Long id, CategorieDTO categorieDTO) {
+        return categorieRepository.findById(id).map(categorie -> {
+            // Update fields
+            categorie.setNom(categorieDTO.getNom());
+            categorie.setDescription(categorieDTO.getDescription());
+            return CategorieMapper.convertToDto(categorieRepository.save(categorie));
+        });
+    }
 }

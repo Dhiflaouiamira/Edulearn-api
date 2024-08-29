@@ -51,6 +51,9 @@ public class BlogServicesImpl implements BlogServices{
             blog.setTitle(blogDTO.getTitle());
             blog.setDescription(blogDTO.getDescription());
             blog.setCover(blogDTO.getCover());
+            blog.setCover1(blogDTO.getCover1());
+            blog.setCover2(blogDTO.getCover2());
+
             blog.setCreatedAt(blogDTO.getCreatedAt());
            
             return BlogMapper.convertToDto(blogRepository.save(blog));

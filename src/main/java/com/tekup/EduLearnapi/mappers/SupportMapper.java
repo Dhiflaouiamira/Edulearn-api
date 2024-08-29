@@ -7,14 +7,15 @@ import com.tekup.EduLearnapi.model.Support;
 
 public class SupportMapper {
 
-	private static final ModelMapper modelMapper= new ModelMapper();
+    private static final ModelMapper modelMapper = new ModelMapper();
 
-	public static SupportDTO convertToDto(Support support)
-	{
-		return modelMapper.map(support, SupportDTO.class);
-	}
-	public static Support convertToEntity(SupportDTO supportDTO)
-	{
-		return modelMapper.map(supportDTO, Support.class);
-	}
+    // Convert Support entity to SupportDTO
+    public static SupportDTO convertToDto(Support support) {
+        return modelMapper.map(support, SupportDTO.class);
+    }
+
+    // Convert SupportDTO to Support entity
+    public static Support convertToEntity(SupportDTO supportDTO) {
+        return modelMapper.map(supportDTO, Support.class);
+    }
 }

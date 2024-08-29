@@ -20,14 +20,14 @@ import com.tekup.EduLearnapi.dto.UserDTO;
 public interface UserServices {
 	
 	public Page<UserDTO> getAllUsers(Pageable pageable) ;
-	public UserDTO addOneUser(UserDTO user);
+	 public UserDTO addOneUser(UserDTO userDTO);
 	public void deleteOneUser(long id);
 	public Optional<UserDTO> findOneUser(long id);
 	public UserDTO assignCommentaireToUser(long id,CommentaireDTO commentaire);
 	public UserDTO assignReclamationToUser(long id,ReclamationDTO reclamation);
 	public UserDTO assignBlogToUser(long id,BlogDTO blog);
 	public UserDTO assignPaiementToUser(long id,PaiementDTO paiement);
-	public UserDTO assignCoursToUser(long id,CoursDTO cours);
+	public UserDTO assignCoursToUser(Long userId, Long coursId);
 	public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO);
     Page<UserDTO> getUsersByRole(String role, Pageable pageable);
 

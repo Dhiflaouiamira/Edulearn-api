@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.dto;
 
 import java.util.Date;
+
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
@@ -9,7 +10,6 @@ import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -47,9 +47,7 @@ public class CoursDTO {
     @Positive  
     private double prix;
     
-    @Positive  
-    private String type;
-
+  
     @NotBlank
     private String sujet;
 
