@@ -7,7 +7,12 @@ import com.tekup.EduLearnapi.model.Paiement;
 
 public class PaiementMapper {
 
-	private static final ModelMapper modelMapper= new ModelMapper();
+	 private static final ModelMapper modelMapper = new ModelMapper();
+
+	    static {
+	        // Configure ModelMapper to ignore ambiguity
+	        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+	    }
 
 	public static PaiementDTO convertToDto(Paiement paiement)
 	{

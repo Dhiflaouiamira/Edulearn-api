@@ -1,5 +1,6 @@
 package com.tekup.EduLearnapi.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import com.tekup.EduLearnapi.dto.CategorieDTO;
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
@@ -30,6 +32,7 @@ import com.tekup.EduLearnapi.model.Cours;
 import com.tekup.EduLearnapi.model.Paiement;
 import com.tekup.EduLearnapi.model.Reclamation;
 import com.tekup.EduLearnapi.model.User;
+import com.tekup.EduLearnapi.repository.CategorieRepository;
 import com.tekup.EduLearnapi.repository.ChapitreRepository;
 import com.tekup.EduLearnapi.repository.CommentaireRepository;
 import com.tekup.EduLearnapi.repository.CoursRepository;
@@ -51,6 +54,9 @@ public class CoursServicesImpl implements CoursServices {
 
     @Autowired
     private final PaiementRepository paiementRepository;
+    
+    @Autowired
+    private final CategorieRepository categorieRepository;
     
     @Autowired
     private final UserRepository userRepository;
@@ -122,26 +128,50 @@ public class CoursServicesImpl implements CoursServices {
     }
 
     @Override
-    public CoursDTO assignPaiementToCours(long id, PaiementDTO paiementDTO) {
-        return coursRepository.findById(id).map(cours -> {
+    public CoursDTO assignPaiementToCours(long coursId, PaiementDTO paiementDTO) {
+    	Cours cours = coursRepository.findById(coursId)
+                .orElseThrow();
+            
             Paiement paiement = PaiementMapper.convertToEntity(paiementDTO);
             paiement.setCours(cours);
+
+            User user = userRepository.findById(paiementDTO.getUserId())
+                .orElseThrow();
+            
+            paiement.setUser(user);
+
             paiementRepository.save(paiement);
-            cours.setPaiement(paiement);
-            return CoursMapper.convertToDto(coursRepository.save(cours));
-        }).orElse(null);
+            return CoursMapper.convertToDto(cours);
     }
 
+
     @Override
-    public CoursDTO assignCategorieToCours(long id, CategorieDTO categorieDTO) {
-        return coursRepository.findById(id).map(cours -> {
-            Set<Categorie> categories = cours.getCategories();
-            Categorie categorie = CategorieMapper.convertToEntity(categorieDTO);
-            categories.add(categorie);
-            cours.setCategories(categories);
-            return CoursMapper.convertToDto(coursRepository.save(cours));
-        }).orElse(null);
+    public CoursDTO assignCategorieToCours(Long coursId, Long categorieId) {
+        // Fetch the Cours entity using the Cours ID
+        Cours cours = coursRepository.findById(coursId)
+            .orElseThrow(() -> new EntityNotFoundException("Course not found"));
+
+        // Fetch the Categorie entity using the Categorie ID
+        Categorie categorie = categorieRepository.findById(categorieId)
+            .orElseThrow(() -> new EntityNotFoundException("Categorie not found"));
+
+        // Initialize the categories set in Cours if it is null
+        Set<Categorie> categorieSet = cours.getAssignedCategorie();
+        if (categorieSet == null) {
+            categorieSet = new HashSet<>();
+        }
+
+        // Add the Categorie to the Cours' categories set
+        categorieSet.add(categorie);
+        cours.setAssignedCategorie(categorieSet);
+
+        // Save the updated Cours entity
+        Cours updatedCours = coursRepository.save(cours);
+
+        // Convert the updated Cours entity to CoursDTO and return
+        return CoursMapper.convertToDto(updatedCours);
     }
+
 
     @Override
     public Optional<CoursDTO> updateOneCours(Long id, CoursDTO coursDTO) {

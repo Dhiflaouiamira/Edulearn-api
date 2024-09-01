@@ -15,6 +15,7 @@ import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.model.Cours;
 public interface CoursServices {
 
@@ -27,8 +28,8 @@ public interface CoursServices {
 	
 	public CoursDTO assignCommentaireToCours(long id,CommentaireDTO commentaire);
 	public CoursDTO assignChapitreToCours(long id,ChapitreDTO chapitre);
-	public CoursDTO assignPaiementToCours(long id,PaiementDTO paiementDTO);
-	public CoursDTO assignCategorieToCours(long id,CategorieDTO categorie);
+	public CoursDTO assignPaiementToCours(long id, PaiementDTO paiementDTO)  ;
+	public CoursDTO  assignCategorieToCours(Long coursId, Long categorieId);
 	
 	public List<Cours> findCoursesByLangue(String langue);
 

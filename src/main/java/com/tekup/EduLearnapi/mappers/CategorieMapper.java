@@ -1,10 +1,12 @@
 package com.tekup.EduLearnapi.mappers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import com.tekup.EduLearnapi.dto.CategorieDTO;
 import com.tekup.EduLearnapi.model.Categorie;
 
+@Component
 public class CategorieMapper {
 
 	private static final ModelMapper modelMapper= new ModelMapper();

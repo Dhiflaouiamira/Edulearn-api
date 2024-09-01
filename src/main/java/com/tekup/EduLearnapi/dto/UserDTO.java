@@ -55,7 +55,10 @@ public class UserDTO {
 
     @JsonIgnoreProperties("user")
     private List<CommentaireDTO> commentaires;
-
+    
+    @JsonIgnoreProperties("user")
+    private List<PaiementDTO> paiements;
+    
     @JsonIgnoreProperties("user")
     private List<ReclamationDTO> reclamations;
 

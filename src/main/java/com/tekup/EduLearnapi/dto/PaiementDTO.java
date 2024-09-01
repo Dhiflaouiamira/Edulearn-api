@@ -2,7 +2,8 @@ package com.tekup.EduLearnapi.dto;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,19 +15,24 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PaiementDTO {
+    @NotNull
+    @Positive
+    private Double montant;
 
-	    @NotBlank
-	    private Double montant;
+    @NotNull
+    private Date datePaiement;
 
-	    @NotBlank	    
-	    private Date datePaiement;
+    @NotNull
+    private String modePaiement;
+    
+    // Avoid circular references and use IDs for bi-directional relationships
+    private Long userId; // User ID
+    private Long coursId; // Cours ID
 
-	    @NotBlank
-	    private String modePaiement;
-	    
-	    @JsonIgnoreProperties("paiements")
-	    private UserDTO user;
-	    
-	    @JsonIgnoreProperties("paiement")
-	    private CoursDTO cours;
+    // Use JsonIgnoreProperties for serialization to avoid infinite recursion
+    @JsonIgnoreProperties("paiements")
+    private UserDTO user;
+    
+    @JsonIgnoreProperties("paiement")
+    private CoursDTO cours;
 }

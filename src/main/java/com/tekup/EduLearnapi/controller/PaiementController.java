@@ -30,10 +30,9 @@ public class PaiementController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STUDENT')")
-    public ResponseEntity<PaiementDTO> addOnePaiement(@RequestBody PaiementDTO paiementDTO) {
-        PaiementDTO savedPaiement = paiementServices.addOnePaiement(paiementDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPaiement);
+    public ResponseEntity<PaiementDTO> createPaiement(@RequestBody PaiementDTO paiementDTO) {
+        PaiementDTO createdPaiement = paiementServices.createPaiement(paiementDTO);
+        return ResponseEntity.ok(createdPaiement);
     }
 
     @GetMapping("/{id}")

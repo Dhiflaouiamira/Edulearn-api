@@ -10,7 +10,7 @@ import com.tekup.EduLearnapi.dto.PaiementDTO;
 public interface PaiementServices {
 
 	public Page<PaiementDTO> getAllPaiements(Pageable pageable) ;
-	public PaiementDTO addOnePaiement(PaiementDTO paiement);
+	public PaiementDTO createPaiement(PaiementDTO paiementDTO);
 	public void deleteOnePaiement(long id);
 	public Optional<PaiementDTO> findOnePaiement(long id);
 	public Optional<PaiementDTO> updateOnePaiement(Long id, PaiementDTO paiementDTO);

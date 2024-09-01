@@ -1,33 +1,21 @@
 package com.tekup.EduLearnapi.model;
 
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
-
-import javax.validation.constraints.NotBlank; 
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Paiement extends BaseEntity{
-
-
+public class Paiement extends BaseEntity {
 
     @Column(nullable = false)
-    @NotBlank
     private double montant;
 
     @Column(nullable = false)
@@ -35,13 +23,12 @@ public class Paiement extends BaseEntity{
 
     @Column(nullable = false)
     private String modePaiement;
-    
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    private User user;
-    
-    @MapsId
-    @OneToOne(optional = false)
-    @JoinColumn(name = "id")
+
+    @OneToOne
+    @JoinColumn(name = "cours_id", referencedColumnName = "id") // Foreign key to Cours
     private Cours cours;
 
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false) // Foreign key to User
+    private User user;
 }

@@ -39,4 +39,5 @@ public class Categorie extends BaseEntity {
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
     private Set<Cours> cours;
     
+    
 }

@@ -14,8 +14,11 @@ import com.tekup.EduLearnapi.Service.CoursServices;
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
+import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -108,5 +111,22 @@ public class CoursController {
         return coursServices.assignCommentaireToCours(id, commentaire);	
     }
     
+    @PostMapping("/paiement/{id}")
+    public CoursDTO assignToPaiement(@PathVariable long id,@RequestBody PaiementDTO paiement) {
+        return coursServices.assignPaiementToCours(id, paiement);	
+    }
     
+    @PutMapping("/{categorieId}/categorie/{coursId}")
+    public ResponseEntity<CoursDTO> assignCoursToCategorie(
+            @PathVariable Long coursId,
+            @PathVariable Long categorieId
+    ) {
+        try {
+            CoursDTO coursDTO = coursServices.assignCategorieToCours(coursId, categorieId);
+            return ResponseEntity.ok(coursDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
+

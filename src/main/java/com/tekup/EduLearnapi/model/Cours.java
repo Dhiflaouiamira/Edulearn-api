@@ -8,6 +8,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,9 +68,15 @@ public class Cours extends BaseEntity {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<User> users;
 
-    @ManyToMany(mappedBy = "cours")
-    private Set<Categorie> categories;
+    @ManyToMany
+    @JoinTable(name = "cours_categorie",
+            joinColumns = @JoinColumn(name = "cours_id"),
+            inverseJoinColumns = @JoinColumn(name = "categorie_id"))
+    private Set<Categorie> assignedCategorie = new HashSet<>();
 
+
+    
+    
     @OneToMany(mappedBy = "cours")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Commentaire> commentaires;
@@ -79,6 +88,7 @@ public class Cours extends BaseEntity {
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Langue langue;
 
-    @OneToOne(mappedBy = "cours", cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "cours")
     private Paiement paiement;
 }
