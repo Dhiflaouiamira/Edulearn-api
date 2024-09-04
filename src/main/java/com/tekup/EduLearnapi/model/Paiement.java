@@ -24,10 +24,11 @@ public class Paiement extends BaseEntity {
     @Column(nullable = false)
     private String modePaiement;
 
-    @OneToOne
-    @JoinColumn(name = "cours_id", referencedColumnName = "id") // Foreign key to Cours
-    private Cours cours;
-
+    @ManyToOne
+    @JoinColumn(name = "cours_id")
+    private Cours cours; //
+    
+    
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false) // Foreign key to User
     private User user;

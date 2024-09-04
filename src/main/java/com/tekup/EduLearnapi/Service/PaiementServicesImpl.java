@@ -39,27 +39,34 @@ public class PaiementServicesImpl implements PaiementServices{
 		
 	}
 
-	 @Override
-	    public PaiementDTO createPaiement(PaiementDTO paiementDTO) {
-	        // Retrieve entities from the repositories
-	        Cours cours = coursRepository.findById(paiementDTO.getCoursId())
-	                                    .orElseThrow(() -> new RuntimeException("Course not found"));
-	        User user = userRepository.findById(paiementDTO.getUserId())
-	                                  .orElseThrow(() -> new RuntimeException("User not found"));
+	@Override
+	@Transactional
+	public PaiementDTO createPaiement(PaiementDTO paiementDTO) {
+	    // Fetch the Cours and User entities
+	    Cours cours = coursRepository.findById(paiementDTO.getCoursId())
+	                                .orElseThrow(() -> new RuntimeException("Course not found"));
+	    User user = userRepository.findById(paiementDTO.getUserId())
+	                              .orElseThrow(() -> new RuntimeException("User not found"));
 
-	        // Create a new Paiement entity
-	        Paiement paiement = PaiementMapper.convertToEntity(paiementDTO);
+	    // Convert PaiementDTO to Paiement entity
+	    Paiement paiement = PaiementMapper.convertToEntity(paiementDTO);
+	    paiement.setCours(cours);
+	    paiement.setUser(user);
 
-	        // Set the Cours and User
-	        paiement.setCours(cours);
-	        paiement.setUser(user);
+	    // Save the Paiement entity
+	    Paiement savedPaiement = paiementRepository.save(paiement);
 
-	        // Save the Paiement entity
-	        Paiement savedPaiement = paiementRepository.save(paiement);
-
-	        // Convert saved Paiement entity back to DTO
-	        return PaiementMapper.convertToDto(savedPaiement);
+	    // Ensure the user is associated with the course
+	    if (!cours.getAssignedUser().contains(user)) {
+	        cours.getAssignedUser().add(user);
+	        coursRepository.save(cours);
 	    }
+
+	    // Convert and return the PaiementDTO
+	    return PaiementMapper.convertToDto(savedPaiement);
+	}
+	
+	
 	@Override
 	public void deleteOnePaiement(long id) {
 		paiementRepository.deleteById(id);		

@@ -55,9 +55,5 @@ public class LangueController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/cours/{id}")
-    public ResponseEntity<LangueDTO> assignToCours(@PathVariable Long id, @RequestBody CoursDTO cours) {
-        LangueDTO updatedLangue = langueServices.assignCoursToLangue(id, cours);
-        return ResponseEntity.ok(updatedLangue);
-    }
+  
 }

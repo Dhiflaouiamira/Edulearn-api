@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.tekup.EduLearnapi.Service.PaiementServices;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
+import com.tekup.EduLearnapi.model.Cours;
+import com.tekup.EduLearnapi.repository.PaiementRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,8 +25,11 @@ public class PaiementController {
     @Autowired
     private final PaiementServices paiementServices;
 
+    
+    @Autowired
+    private final PaiementRepository paiementRepository;
+    
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STUDENT')")
     public ResponseEntity<Page<PaiementDTO>> getAllPaiements(Pageable pageable) {
         Page<PaiementDTO> paiements = paiementServices.getAllPaiements(pageable);
         return ResponseEntity.ok(paiements);
@@ -31,6 +37,7 @@ public class PaiementController {
 
     @PostMapping
     public ResponseEntity<PaiementDTO> createPaiement(@RequestBody PaiementDTO paiementDTO) {
+        // Call the service to create the paiement and handle enrollment
         PaiementDTO createdPaiement = paiementServices.createPaiement(paiementDTO);
         return ResponseEntity.ok(createdPaiement);
     }
@@ -50,6 +57,7 @@ public class PaiementController {
         return updatedPaiement.map(ResponseEntity::ok)
                               .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -1,7 +1,5 @@
 package com.tekup.EduLearnapi.controller;
 
-import java.sql.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.tekup.EduLearnapi.Service.JwtService;
 import com.tekup.EduLearnapi.Service.UserServices;
@@ -25,14 +20,8 @@ import com.tekup.EduLearnapi.model.AuthResponse;
 import com.tekup.EduLearnapi.model.User;
 import com.tekup.EduLearnapi.repository.UserRepository;
 
-import io.jsonwebtoken.io.IOException;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("api/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired
@@ -40,10 +29,9 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private final UserServices userServices;
-    
+    private UserServices userServices;
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
@@ -54,12 +42,20 @@ public class AuthController {
             if (authenticate.isAuthenticated()) {
                 String token = jwtService.generateToken(authRequest.getUserName());
 
-                // Fetch user details to get the role
+                // Fetch user details
                 User user = userRepository.findByNom(authRequest.getUserName())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-                // Create response with token and role
-                AuthResponse authResponse = new AuthResponse(token, user.getRole());
+                // Create response with all user details including the ID
+                AuthResponse authResponse = new AuthResponse(
+                    token,
+                    user.getRole(),
+                    user.getImage(), // Assuming this field is in the User class
+                    user.getNom(), // Assuming getter for name
+                    user.getEmail(), // Assuming getter for email
+                    user.getTelephone(), // Assuming getter for telephone
+                    user.getId() // Include the ID field
+                );
 
                 return ResponseEntity.ok(authResponse);
             } else {
@@ -69,7 +65,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user request");
         }
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
@@ -85,7 +80,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed: " + e.getMessage());
         }
     }
-
-
-
 }

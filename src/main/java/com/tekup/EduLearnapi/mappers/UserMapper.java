@@ -9,8 +9,12 @@ import com.tekup.EduLearnapi.model.User;
 @Component
 public class UserMapper {
 
-	private static final ModelMapper modelMapper= new ModelMapper();
+	 private static final ModelMapper modelMapper = new ModelMapper();
 
+	    static {
+	        // Configure ModelMapper to ignore ambiguity
+	        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+	    }
 	public static UserDTO convertToDto(User user)
 	{
 		return modelMapper.map(user, UserDTO.class);

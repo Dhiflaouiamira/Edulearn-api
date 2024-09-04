@@ -7,8 +7,12 @@ import com.tekup.EduLearnapi.model.Cours;
 
 public class CoursMapper {
 
-	private static final ModelMapper modelMapper= new ModelMapper();
+	 private static final ModelMapper modelMapper = new ModelMapper();
 
+	    static {
+	        // Configure ModelMapper to ignore ambiguity
+	        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+	    }
 	public static CoursDTO convertToDto(Cours cours)
 	{
 		return modelMapper.map(cours, CoursDTO.class);

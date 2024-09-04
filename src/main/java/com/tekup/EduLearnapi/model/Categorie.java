@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+
+import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 
@@ -36,8 +38,10 @@ public class Categorie extends BaseEntity {
     @NotBlank
     private  byte[]  image;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
-    private Set<Cours> cours;
+
+    @ManyToMany(mappedBy = "assignedCategorie")
+    private Set<Cours> cours = new HashSet<>();
     
+   
     
 }

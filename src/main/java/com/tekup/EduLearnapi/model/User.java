@@ -59,11 +59,8 @@ public class User extends BaseEntity {
     @NotBlank
     private String image;
 
-    @ManyToMany
-    @JoinTable(name = "user_cours",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "cours_id"))
-    private Set<Cours> assignedCours = new HashSet<>();
+    @ManyToMany(mappedBy = "assignedUser")
+    private Set<Cours> Cours = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)

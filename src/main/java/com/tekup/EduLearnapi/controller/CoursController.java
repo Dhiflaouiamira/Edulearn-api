@@ -3,26 +3,25 @@ package com.tekup.EduLearnapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import com.tekup.EduLearnapi.Service.CoursServices;
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
 import com.tekup.EduLearnapi.dto.CoursDTO;
+import com.tekup.EduLearnapi.dto.LangueDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
-import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.CoursMapper;
-
+import com.tekup.EduLearnapi.model.Cours;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,10 +38,20 @@ public class CoursController {
         return ResponseEntity.ok(cours);
     }
 
-    @PostMapping
-    public ResponseEntity<CoursDTO> addOneCours(@RequestBody CoursDTO coursDTO) {
-        CoursDTO savedCours = coursServices.addOneCours(coursDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCours);
+    @PostMapping("/add/{langueId}/user/{userId}")
+    public ResponseEntity<LangueDTO> addCourseAndAssign(
+            @PathVariable long langueId,
+            @PathVariable long userId,
+            @RequestBody CoursDTO coursDTO) {
+
+        try {
+            LangueDTO updatedLangue = coursServices.addCourseAndAssign(coursDTO, langueId, userId);
+            return ResponseEntity.ok(updatedLangue);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -76,30 +85,20 @@ public class CoursController {
     }
 
     
-    @GetMapping("/byDescription")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
-    public ResponseEntity<List<CoursDTO>> findCoursesByDescription(@RequestParam String description) {
-        List<CoursDTO> courses = coursServices.findCoursesBydesc(description)
-                .stream()
-                .map(CoursMapper::convertToDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(courses);
-    }
-    
+
     @GetMapping("/searchByLangue")
     public ResponseEntity<List<CoursDTO>> findCoursesByLangue(@RequestParam String langue) {
         List<CoursDTO> courses = coursServices.findCoursesByLangue(langue)
                 .stream()
-                .map(CoursMapper::convertToDto) // Ensure this method exists and works correctly
+                .map(CoursMapper::convertToDto) 
                 .collect(Collectors.toList());
-        
-        // Return the list of courses
         if (courses.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Return 204 No Content if no courses are found
+            return ResponseEntity.noContent().build();
         }
-
-        return ResponseEntity.ok(courses); // Return 200 OK with the list of courses
+        return ResponseEntity.ok(courses); 
     }
+    
+ 
     
     @PostMapping("/chapitre/{id}")
     public CoursDTO assignToChapitre(@PathVariable long id, @RequestBody ChapitreDTO chapitre) {
@@ -128,5 +127,50 @@ public class CoursController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-}
+    
+    
+    @PutMapping("/{userId}/user/{coursId}")
+    public ResponseEntity<CoursDTO> assignCoursToUser(
+            @PathVariable Long coursId,
+            @PathVariable Long userId
+    ) {
+        try {
+            CoursDTO coursDTO = coursServices.assignUserToCours(coursId, userId);
+            return ResponseEntity.ok(coursDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    
+    
+    @GetMapping("/category/{categorieId}")
+    public ResponseEntity<Set<Cours>> getCoursesByCategory(@PathVariable Long categorieId) {
+        Set<Cours> courses = coursServices.getCoursesByCategory(categorieId);
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
+ 
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CoursDTO>> getCoursesByUser(@PathVariable Long userId) {
+    	 List<CoursDTO> courses = coursServices.getCoursesByUser(userId)
+        		 .stream()
+                .map(CoursMapper::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(courses);
+    }
+    
+    @GetMapping("/description")
+    public ResponseEntity<List<CoursDTO>> findCoursesByDescription(@RequestParam String description) {
+        List<CoursDTO> courses = coursServices.findCoursesBydesc(description)
+                .stream()
+                .map(CoursMapper::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(courses);
+    }
+    
+    
 
+}

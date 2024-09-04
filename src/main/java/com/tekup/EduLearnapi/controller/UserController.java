@@ -1,20 +1,21 @@
 package com.tekup.EduLearnapi.controller;
 
 import lombok.RequiredArgsConstructor;
+
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import com.tekup.EduLearnapi.Service.UserServices;
 import com.tekup.EduLearnapi.dto.BlogDTO;
-import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
 import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
-import com.tekup.EduLearnapi.model.User;
+
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -45,7 +46,6 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         return userServices.updateOneUser(id, userDTO)
                            .map(ResponseEntity::ok)
@@ -85,18 +85,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{userId}/cours/{coursId}")
-    public ResponseEntity<UserDTO> assignCoursToUser(
-            @PathVariable Long userId,
-            @PathVariable Long coursId
-    ) {
-        try {
-            UserDTO userDTO = userServices.assignCoursToUser(userId, coursId);
-            return ResponseEntity.ok(userDTO);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
+    
 
     @PostMapping("/{userId}/blog")
     public ResponseEntity<UserDTO> assignToBlog(@PathVariable long userId, @RequestBody BlogDTO blogDTO) {

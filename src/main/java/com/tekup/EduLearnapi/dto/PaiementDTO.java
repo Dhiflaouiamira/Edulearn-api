@@ -15,6 +15,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PaiementDTO {
+	
+    private Long id;
+ 
     @NotNull
     @Positive
     private Double montant;

@@ -1,25 +1,19 @@
 package com.tekup.EduLearnapi.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.tekup.EduLearnapi.dto.BlogDTO;
 import com.tekup.EduLearnapi.dto.CommentaireDTO;
-import com.tekup.EduLearnapi.dto.CoursDTO;
 import com.tekup.EduLearnapi.dto.PaiementDTO;
 import com.tekup.EduLearnapi.dto.ReclamationDTO;
 import com.tekup.EduLearnapi.dto.UserDTO;
 import com.tekup.EduLearnapi.mappers.BlogMapper;
 import com.tekup.EduLearnapi.mappers.CommentaireMapper;
-import com.tekup.EduLearnapi.mappers.CoursMapper;
 import com.tekup.EduLearnapi.mappers.PaiementMapper;
 import com.tekup.EduLearnapi.mappers.ReclamationMapper;
 import com.tekup.EduLearnapi.mappers.UserMapper;
@@ -65,8 +59,7 @@ public class UserServicesImpl implements UserServices {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private final UserMapper userMapper;
+
 
     @Override
     public Page<UserDTO> getAllUsers(Pageable pageable) {
@@ -166,32 +159,9 @@ public class UserServicesImpl implements UserServices {
         return UserMapper.convertToDto(user);
     }
 
+	
+ 
 
-    @Override
-    public UserDTO assignCoursToUser(Long userId, Long coursId) {
-        // Fetch the User entity
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Fetch the Cours entity using the Cours ID
-        Cours cours = coursRepository.findById(coursId)
-            .orElseThrow(() -> new EntityNotFoundException("Course not found"));
-
-        // Initialize the assignedCours set if it is null
-        Set<Cours> coursSet = user.getAssignedCours();
-        if (coursSet == null) {
-            coursSet = new HashSet<>();
-        }
-
-        // Add the Cours to the User's assignedCours set
-        coursSet.add(cours);
-        user.setAssignedCours(coursSet);
-
-        // Save the updated User entity
-        User updatedUser = userRepository.save(user);
-
-        // Convert the updated User entity to UserDTO and return
-        return UserMapper.convertToDto(updatedUser);
-    }
    }
 

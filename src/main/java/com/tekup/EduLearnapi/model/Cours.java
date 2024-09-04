@@ -13,7 +13,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -53,8 +52,6 @@ public class Cours extends BaseEntity {
     @Column(nullable = false)
     private double prix;
 
- 
-
     @Column(nullable = false)
     private String cover;
 
@@ -65,18 +62,19 @@ public class Cours extends BaseEntity {
     @Column(nullable = false)
     private boolean certification;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    private Set<User> users;
+    @ManyToMany
+    @JoinTable(name = "user_cours",
+               joinColumns = @JoinColumn(name = "cours_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> assignedUser = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "cours_categorie",
-            joinColumns = @JoinColumn(name = "cours_id"),
-            inverseJoinColumns = @JoinColumn(name = "categorie_id"))
-    private Set<Categorie> assignedCategorie = new HashSet<>();
-
-
+               joinColumns = @JoinColumn(name = "cours_id"),
+               inverseJoinColumns = @JoinColumn(name = "categorie_id"))
+    private Set<Categorie> assignedCategorie = new HashSet<>(); 
     
-    
+
     @OneToMany(mappedBy = "cours")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Commentaire> commentaires;
@@ -88,7 +86,6 @@ public class Cours extends BaseEntity {
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Langue langue;
 
-
-    @OneToOne(mappedBy = "cours")
-    private Paiement paiement;
+    @OneToMany(mappedBy = "cours")
+    private List<Paiement> paiements; // One-to-many relationship
 }

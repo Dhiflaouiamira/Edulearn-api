@@ -69,6 +69,8 @@ public class CoursDTO {
 
     // Reference to Langue by its ID
     private Long langueId;
+    
+
 
     @JsonIgnoreProperties("cours")
     private PaiementDTO paiements;
