@@ -53,4 +53,8 @@ public class Chapitre extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Reunion> reunions;
     
+    
+    @OneToMany(mappedBy = "chapitre")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Question> questions;
 }

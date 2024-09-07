@@ -20,6 +20,8 @@ import com.tekup.EduLearnapi.model.AuthResponse;
 import com.tekup.EduLearnapi.model.User;
 import com.tekup.EduLearnapi.repository.UserRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {
@@ -65,11 +67,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user request");
         }
     }
-
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> register(@Valid @RequestBody UserDTO userDTO) {
         try {
-            // Set the role to "student"
+            // Check if user already exists by email
+            if (userServices.existsByEmail(userDTO.getEmail())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this email already exists");
+            }
+
+            // Set the role to "STUDENT"
             userDTO.setRole("STUDENT");
 
             // Add the user with the specified role

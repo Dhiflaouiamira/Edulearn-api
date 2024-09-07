@@ -6,7 +6,8 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Past;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -22,35 +23,36 @@ public class UserDTO {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Name cannot be blank")
     private String nom;
 
-    @NotBlank
+    @NotBlank(message = "Surname cannot be blank")
     private String prenom;
 
-    @Email
-    @NotBlank
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email cannot be blank")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Role cannot be blank")
     private String role;
 
-    @Positive
+    @Past(message = "Date of Birth must be in the past")
     private Date dateDeNaissance;
 
-    @Positive
-    private double telephone;
+    @NotBlank(message = "Telephone number cannot be blank")
+    private double telephone; // Changed to String to handle large numbers
 
-    @NotBlank
+    @NotBlank(message = "CIN cannot be blank")
     private String cin;
 
-    @NotBlank
+    @NotBlank(message = "Gender cannot be blank")
     private String genre;
+
     @Lob
-    @NotBlank
+    @NotBlank(message = "Image URL cannot be blank")
     private String image;
 
     @JsonIgnoreProperties("user")

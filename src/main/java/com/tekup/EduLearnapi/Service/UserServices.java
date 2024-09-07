@@ -23,5 +23,6 @@ public interface UserServices {
 	public UserDTO assignPaiementToUser(long id,PaiementDTO paiement);
 	public Optional<UserDTO> updateOneUser(Long id, UserDTO userDTO);
     Page<UserDTO> getUsersByRole(String role, Pageable pageable);
+    public boolean existsByEmail(String email);
 
 }

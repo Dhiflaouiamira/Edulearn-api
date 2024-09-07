@@ -159,7 +159,9 @@ public class UserServicesImpl implements UserServices {
         return UserMapper.convertToDto(user);
     }
 
-	
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
  
 
 

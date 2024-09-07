@@ -37,9 +37,9 @@ public class User extends BaseEntity {
     @Email
     @Column(nullable = false, unique = true)
     @NotBlank
-    private String email;
+    private String email; // Unique constraint applied to email
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotBlank
     private String password;
 
@@ -52,7 +52,7 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     @NotBlank
-    private String cin;
+    private String cin; // Unique constraint applied to cin
 
     @Lob
     @Column(nullable = false)
@@ -60,7 +60,7 @@ public class User extends BaseEntity {
     private String image;
 
     @ManyToMany(mappedBy = "assignedUser")
-    private Set<Cours> Cours = new HashSet<>();
+    private Set<Cours> cours = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @OnDelete(action = OnDeleteAction.CASCADE)
