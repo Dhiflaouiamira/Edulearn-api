@@ -10,12 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tekup.EduLearnapi.dto.ChapitreDTO;
+import com.tekup.EduLearnapi.dto.QuestionDTO;
 import com.tekup.EduLearnapi.dto.SupportDTO;
 import com.tekup.EduLearnapi.mappers.ChapitreMapper;
+import com.tekup.EduLearnapi.mappers.QuestionMapper;
 import com.tekup.EduLearnapi.mappers.SupportMapper;
 import com.tekup.EduLearnapi.model.Chapitre;
+import com.tekup.EduLearnapi.model.Question;
 import com.tekup.EduLearnapi.model.Support;
 import com.tekup.EduLearnapi.repository.ChapitreRepository;
+import com.tekup.EduLearnapi.repository.QuestionRepository;
 import com.tekup.EduLearnapi.repository.SupportRepository;
 
 @Service
@@ -26,6 +30,9 @@ public class ChapitreServicesImpl implements ChapitreServices {
 
     @Autowired
     private SupportRepository supportRepository;
+    
+    @Autowired
+    private  QuestionRepository  questionRepository;
 
     @Override
     public Page<ChapitreDTO> getAllChapitres(Pageable pageable) {
@@ -83,4 +90,29 @@ public class ChapitreServicesImpl implements ChapitreServices {
                         .map(ChapitreMapper::convertToDto)
                         .collect(Collectors.toList());
     }
+
+	@Override
+	public ChapitreDTO assignQuestionToChapitre(long chapitreId, QuestionDTO questionDTO) {
+		 Optional<Chapitre> chapitreOptional = chapitreRepository.findById(chapitreId);
+	        if (chapitreOptional.isPresent()) {
+	            Chapitre chapitre = chapitreOptional.get();
+	            Question question = QuestionMapper.convertToEntity(questionDTO);
+	            question.setChapitre(chapitre);
+	            questionRepository.save(question);
+	            return ChapitreMapper.convertToDto(chapitre);
+	        } else {
+	            // Handle chapitre not found scenario
+	            return null;
+	        }
+	    }
+
+	@Override
+	public List<ChapitreDTO> findChapitresByTitre(String titre) {
+		   List<Chapitre> chapitres = chapitreRepository.findByTitre(titre);
+	        return chapitres.stream()
+	                        .map(ChapitreMapper::convertToDto)
+	                        .collect(Collectors.toList());
+	    }
+
+
 }

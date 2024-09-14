@@ -39,4 +39,7 @@ public class ChapitreDTO {
         
         @JsonIgnoreProperties("chapitre")
 	    private List<SupportDTO> supports;
+        
+	    @JsonIgnoreProperties("chapitre")
+	    private List<QuestionDTO> questions;
 }

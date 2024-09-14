@@ -1,6 +1,7 @@
 package com.tekup.EduLearnapi.Service;
 
 import java.util.List;
+
 import java.util.Optional;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
@@ -62,6 +63,13 @@ import lombok.RequiredArgsConstructor;
 	        Pageable pageable = PageRequest.of(0, numOfQuestions);
 	        return questionRepository.findByChapitre_Id(chapitreId, pageable).getContent();
 	    }
+
+	    
+	    @Override
+		public List<Question> findQuestionByChapitre(String titre)
+		{
+		        return questionRepository.findByChapitreTitre(titre);
+		    }
 
 	}
 
