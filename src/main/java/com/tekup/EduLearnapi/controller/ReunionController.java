@@ -23,21 +23,18 @@ public class ReunionController {
     private final ReunionServices reunionServices;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Page<ReunionDTO>> getAllReunions(Pageable pageable) {
         Page<ReunionDTO> reunions = reunionServices.getAllReunions(pageable);
         return ResponseEntity.ok(reunions);
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ReunionDTO> addReunion(@RequestBody ReunionDTO reunionDTO) {
         ReunionDTO savedReunion = reunionServices.addOneReunion(reunionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReunion);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PROFESSEUR')")
     public ResponseEntity<ReunionDTO> getReunion(@PathVariable Long id) {
         Optional<ReunionDTO> reunionOptional = reunionServices.findOneReunion(id);
         return reunionOptional.map(ResponseEntity::ok)

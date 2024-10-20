@@ -61,6 +61,9 @@ public class Cours extends BaseEntity {
 
     @Column(nullable = false)
     private boolean certification;
+    
+    private int demandMeeting = 0;
+
 
     @ManyToMany
     @JoinTable(name = "user_cours",

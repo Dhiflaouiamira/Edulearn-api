@@ -222,4 +222,13 @@ public class CoursServicesImpl implements CoursServices {
     public Set<Cours> getCoursesByUser(Long UserId) {
         return coursRepository.findByAssignedUserId(UserId);
     }
+    
+    
+    public void requestMeeting(Long courseId) {
+        Cours course = coursRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        course.setDemandMeeting(course.getDemandMeeting() + 1);
+        coursRepository.save(course);
+    }
+
 }

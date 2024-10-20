@@ -174,4 +174,17 @@ public class CoursController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(courses);
     }
+    
+    @PostMapping("/{courseId}/request-meeting")
+    public ResponseEntity<String> requestMeeting(@PathVariable Long courseId) {
+        try {
+        	coursServices.requestMeeting(courseId);
+            return ResponseEntity.ok("Meeting requested successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while requesting the meeting.");
+        }
+    }
+
 }

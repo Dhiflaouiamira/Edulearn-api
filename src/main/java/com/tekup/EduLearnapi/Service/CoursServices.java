@@ -35,6 +35,7 @@ public interface CoursServices {
 	public Set<Cours> getCoursesByUser(Long UserId);
 	
 	public CoursDTO  assignUserToCours(Long coursId, Long userId);
+	public void requestMeeting(Long courseId);
 
 	
 	
